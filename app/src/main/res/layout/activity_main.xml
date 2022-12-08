@@ -33,32 +33,35 @@
         app:srcCompat="@drawable/ic_baseline_expand_circle_down_24" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:layout_height="match_parent"
-        android:layout_width="match_parent"
 
-        >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fitsSystemWindows="true">
-
-    <com.google.android.material.appbar.CollapsingToolbarLayout
-        style="?attr/collapsingToolbarLayoutMediumStyle"
         android:layout_width="match_parent"
-        android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-        android:layout_height="match_parent"
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
-        android:elevation="0dp" />
+            android:layout_height="?attr/actionBarSize"
+            app:title="Today, 8th December"
+            app:menu="@menu/top_app_bar"/>
+<!--        app:navigationIcon="@drawable/ic_baseline_dashboard_24" -->
 
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-</com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    ...
+    <!-- Note: A RecyclerView can also be used -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <!-- Scrollable content -->
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
