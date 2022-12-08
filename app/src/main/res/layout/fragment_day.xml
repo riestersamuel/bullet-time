@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CDDC39"
-    tools:context=".DayFragment">
+    android:background="#ADFBE2"
+    tools:context=".DayFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewBullets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#25FF00"
-        android:text="@string/hello_blank_fragment" />
-
+        android:padding="4dp"
+        android:scrollbars="vertical" />
 </FrameLayout>
