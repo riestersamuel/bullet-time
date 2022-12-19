@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 /**
@@ -48,6 +51,14 @@ public class NotesFragment extends Fragment {
 		if (getArguments() != null) {
 			Date = getArguments().getString(ARG_PARAM1);
 		}
+		notes = MainViewModel.getAllNotes();
+		getActivity().findViewById(R.id.extended_fab_note).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Note note = new Note("New Note", "New Note");
+				notes.add(note);
+			}
+		});
 	}
 
 	@Override
@@ -58,6 +69,8 @@ public class NotesFragment extends Fragment {
 	}
 
 	private void loadNotes() {
-		notes = MainViewModel.getAllNotes();
+		//Todo: load notes from database with note_preview layout
 	}
+
+
 }

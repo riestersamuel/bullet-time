@@ -20,7 +20,14 @@ public class MainViewModel extends AndroidViewModel {
 	}
 
 	public static List<Note> getAllNotes() {
-		return null;
+		return getAllNotes();
 	}
 
+	public void insert(Note note) {
+		noteRepository.insert(note);
+	}
+
+	public void delete(Note note) {
+		noteRepository.delete(note);
+	}
 }
