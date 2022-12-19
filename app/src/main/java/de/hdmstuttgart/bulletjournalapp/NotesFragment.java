@@ -3,6 +3,8 @@ package de.hdmstuttgart.bulletjournalapp;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,9 @@ public class NotesFragment extends Fragment {
 	private static final String ARG_PARAM1 = "param1";
 
 	private String Date;
-	public List<Note> notes;
+	public LiveData<List<Note>> notes;
+	MainViewModel viewModel;
+
 
 	public NotesFragment() {
 		// Required empty public constructor
@@ -48,17 +52,19 @@ public class NotesFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 		if (getArguments() != null) {
 			Date = getArguments().getString(ARG_PARAM1);
 		}
-		notes = MainViewModel.getAllNotes();
-		getActivity().findViewById(R.id.extended_fab_note).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Note note = new Note("New Note", "New Note");
-				notes.add(note);
-			}
-		});
+		notes = viewModel.getAllNotes();
+//		getActivity().findViewById(R.id.extended_fab_note).setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Note note = new Note("New Note", "New Note");
+//				viewModel.insert(note);
+//			}
+//		});
 	}
 
 	@Override

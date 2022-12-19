@@ -25,10 +25,10 @@ public class NoteRepository {
 	}
 
 	public void insert(Note note) {
-		noteDao.insert(note);
+		AppDatabase.databaseWriteExecutor.execute(() -> noteDao.insert(note));
 	}
 
 	public void delete(Note note) {
-		noteDao.delete(note);
+		AppDatabase.databaseWriteExecutor.execute(() -> noteDao.delete(note));
 	}
 }

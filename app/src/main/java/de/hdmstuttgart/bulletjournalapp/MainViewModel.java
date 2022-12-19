@@ -19,8 +19,8 @@ public class MainViewModel extends AndroidViewModel {
 		allNotes = noteRepository.getAll();
 	}
 
-	public static List<Note> getAllNotes() {
-		return getAllNotes();
+	public LiveData<List<Note>>  getAllNotes() {
+		return noteRepository.getAll();
 	}
 
 	public void insert(Note note) {
