@@ -1,11 +1,22 @@
 package de.hdmstuttgart.bulletjournalapp;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.time.LocalDateTime;
 
+@Entity
 public class Note {
+
+	@PrimaryKey(autoGenerate = true)
+	public int uid;
+
 	private String title;
 	private String content;
+	@Ignore
 	private final LocalDateTime creationDate;
+	@Ignore
 	private LocalDateTime editDate;
 
 	public Note(String title, String content) {
