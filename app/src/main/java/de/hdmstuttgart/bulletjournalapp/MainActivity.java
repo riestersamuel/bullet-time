@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
 	DayFragment dayFragment = new DayFragment();
 	NotesFragment notesFragment = new NotesFragment();
-	ProfileFragment profileFragment = new ProfileFragment();
+	TimerFragment profileFragment = new TimerFragment();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dayFragment).commit();
+		bottomNavigationView.getMenu().findItem(R.id.today).setChecked(true);
 
 		bottomNavigationView.setOnItemSelectedListener(x->{
 			switch (x.getItemId()){
@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 				case R.id.notes:
 					getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
 					break;
-				case R.id.profile:
-					getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+				case R.id.timer:
+					getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TimerFragment()).commit();
 					break;
 			}
 			return true;
