@@ -10,6 +10,8 @@ import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import de.hdmstuttgart.bulletjournalapp.NotePackage.NotesFragment;
+
 public class MainActivity extends AppCompatActivity {
 
 	DayFragment dayFragment = new DayFragment();
