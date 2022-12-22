@@ -4,14 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CFCFCF"
     tools:context=".NotePackage.NotesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerViewNotes"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CFCFCF"
-        tools:listitem="@layout/note_preview"/>
+        android:layout_height="match_parent">
+
+        <android.widget.SearchView
+            android:id="@+id/searchBarNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            app:iconifiedByDefault="false">
+
+        </android.widget.SearchView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerViewNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#CFCFCF"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/searchBarNotes"
+            tools:layout_editor_absoluteX="411dp"
+            tools:listitem="@layout/note_preview" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/extended_fab_note"

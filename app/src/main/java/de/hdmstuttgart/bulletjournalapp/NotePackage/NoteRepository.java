@@ -39,4 +39,8 @@ public class NoteRepository {
 	public void update(Note note) {
 		AppDatabase.databaseWriteExecutor.execute(() -> noteDao.update(note.uid, note.getTitle(),note.getContent()));
 	}
+
+	public LiveData<List<Note>> getNotesByKeyword(String keyword) {
+		return noteDao.getNotesByKeyword(keyword);
+	}
 }

@@ -24,6 +24,9 @@ public class MainViewModel extends AndroidViewModel {
 	public LiveData<List<Note>>  getAllNotes() {
 		return noteRepository.getAll();
 	}
+	public LiveData<List<Note>>  getNotesByKeyword(String keyword) {
+		return noteRepository.getNotesByKeyword(keyword);
+	}
 
 	public void insert(Note note) {
 		noteRepository.insert(note);

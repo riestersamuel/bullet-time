@@ -19,6 +19,7 @@ import de.hdmstuttgart.bulletjournalapp.R;
 public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteViewHolder>{
 
 	private List<Note> NoteList;
+	public List<Note> searchedNotes;
 	private onNoteClickListener listener;
 	private onNoteLongClickListener longListener;
 
@@ -34,10 +35,12 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 		this.NoteList = NoteList;
 		this.listener = listener;
 		this.longListener = longListener;
+		this.searchedNotes = new ArrayList<>();
 	}
 
 	public NoteListAdapter() {
 		this.NoteList = new ArrayList<>();
+		this.searchedNotes = new ArrayList<>();
 	}
 
 	@NonNull

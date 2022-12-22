@@ -22,6 +22,9 @@ public interface NoteDao {
 	@Query("UPDATE note SET title = :title, content = :content WHERE uid = :id")
 	void update(int id, String title, String content);
 
+	@Query("SELECT * FROM note WHERE title LIKE '%' || :keyword || '%'")
+	LiveData<List<Note>> getNotesByKeyword(String keyword);
+
 	@Query("SELECT * FROM note WHERE title LIKE :keyword")
 	LiveData<List<Note>> getMoviesByKeyword(String keyword);
 }

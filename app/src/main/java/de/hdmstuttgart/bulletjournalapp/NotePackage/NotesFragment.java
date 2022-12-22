@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,12 +81,62 @@ public class NotesFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 
 		RecyclerView recyclerView = view.findViewById(R.id.RecyclerViewNotes);
-		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		recyclerView.setHasFixedSize(true);
 
 		adapter = new NoteListAdapter(new ArrayList<>(), (note, position) -> {}, (note, position) -> {});
 
+		SearchView searchView = view.findViewById(R.id.searchBarNotes);
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return false;
+			}
 
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				viewModel.getNotesByKeyword(newText).observe(getViewLifecycleOwner(), notes -> {
+					recyclerView.setAdapter(new NoteListAdapter(notes, (note, position) -> {
+						LayoutInflater inflater = getLayoutInflater();
+						View dialogView = inflater.inflate(R.layout.new_note_layout, null);
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+						builder.setView(dialogView);
+
+						final EditText title = dialogView.findViewById(R.id.ET_Title);
+						final EditText content = dialogView.findViewById(R.id.ET_Content);
+						title.setText(note.getTitle());
+						content.setText(note.getContent());
+
+						builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								note.setTitle(title.getText().toString());
+								note.setContent(content.getText().toString());
+								viewModel.update(note);
+							}
+						});
+						builder.setNegativeButton("Cancel", null);
+
+						AlertDialog dialog = builder.create();
+						dialog.show();
+					}, (note, position) -> {
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+						builder.setTitle("Delete Note");
+						builder.setMessage("Are you sure you want to delete this note?");
+						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								viewModel.delete(note);
+							}
+						});
+						builder.setNegativeButton("No", null);
+						builder.show();
+					}));
+				});
+				return true;
+			}
+		});
 
 		viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 		if (getArguments() != null) {

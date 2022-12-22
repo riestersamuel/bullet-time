@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border"
-    android:paddingVertical="8dp"
+    android:maxWidth="256dp"
     android:paddingHorizontal="16dp"
-    >
+    android:paddingVertical="8dp">
 
     <TextView
         android:id="@+id/TV_Date"
@@ -35,8 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:maxLines="3"
         android:text="This is a Preview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleNotePre" />
+        app:layout_constraintTop_toBottomOf="@id/titleNotePre"
+        android:ellipsize="end"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
