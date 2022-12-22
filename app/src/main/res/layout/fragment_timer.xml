@@ -40,6 +40,7 @@
             app:icon="@drawable/ic_baseline_play_arrow_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/extended_fab_stop"
             android:layout_width="wrap_content"
@@ -52,16 +53,16 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                style="?attr/floatingActionButtonSmallStyle"
-                android:id="@+id/small_fab_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                app:layout_constraintBottom_toTopOf="@+id/extended_fab_start"
-                app:layout_constraintEnd_toEndOf="@+id/extended_fab_start"
-                app:icon="@drawable/ic_baseline_pause_24"
-                android:layout_marginBottom="8dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/extended_fab_start"
+            app:layout_constraintEnd_toEndOf="@+id/extended_fab_start"
+            app:srcCompat="@drawable/ic_baseline_pause_24" />
+
 
 
         <LinearLayout
