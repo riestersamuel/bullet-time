@@ -18,19 +18,22 @@ import de.hdmstuttgart.bulletjournalapp.R;
 
 public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteViewHolder>{
 
-	private final List<Note> NoteList;
-	private onMovieClickListener listener;
+	private List<Note> NoteList;
+	private onNoteClickListener listener;
+	private onNoteLongClickListener longListener;
 
-	public interface onMovieClickListener {
+	public interface onNoteClickListener {
 		void onMovieClicked(Note note, int position);
 	}
 
-	public NoteListAdapter(
-			List<Note> NoteList,
-			onMovieClickListener listener
-	){
+	public interface onNoteLongClickListener {
+		void onNoteLongClicked(Note note, int position);
+	}
+
+	public NoteListAdapter(List<Note> NoteList, onNoteClickListener listener, onNoteLongClickListener longListener){
 		this.NoteList = NoteList;
 		this.listener = listener;
+		this.longListener = longListener;
 	}
 
 	public NoteListAdapter() {
@@ -58,7 +61,10 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 			listener.onMovieClicked(note, position);
 		});
 
-
+		holder.itemView.setOnLongClickListener(v -> {
+			longListener.onNoteLongClicked(note, position);
+			return true;
+		});
 	}
 
 	@Override

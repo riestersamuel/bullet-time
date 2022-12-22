@@ -82,7 +82,7 @@ public class NotesFragment extends Fragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setHasFixedSize(true);
 
-		adapter = new NoteListAdapter(new ArrayList<>(), (note, position) -> {});
+		adapter = new NoteListAdapter(new ArrayList<>(), (note, position) -> {}, (note, position) -> {});
 
 
 
@@ -116,6 +116,18 @@ public class NotesFragment extends Fragment {
 
 				AlertDialog dialog = builder.create();
 				dialog.show();
+			}, (note, position) -> {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle("Delete Note");
+				builder.setMessage("Are you sure you want to delete this note?");
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						viewModel.delete(note);
+					}
+				});
+				builder.setNegativeButton("No", null);
+				builder.show();
 			});
 			recyclerView.setAdapter(adapter);
 		});
