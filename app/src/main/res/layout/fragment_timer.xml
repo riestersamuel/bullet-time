@@ -35,11 +35,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:text="Start Timer"
+            android:text="Start Pomodoro"
             android:visibility="visible"
             app:icon="@drawable/ic_baseline_play_arrow_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="?attr/floatingActionButtonSmallStyle"
+            android:id="@+id/small_fab_short_break"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/extended_fab_start"
+            app:layout_constraintEnd_toEndOf="@+id/extended_fab_start"
+            app:srcCompat="@drawable/ic_baseline_coffee_24" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/extended_fab_stop"
@@ -63,7 +74,6 @@
             app:layout_constraintBottom_toTopOf="@+id/extended_fab_start"
             app:layout_constraintEnd_toEndOf="@+id/extended_fab_start"
             app:srcCompat="@drawable/ic_baseline_pause_24" />
-
 
 
         <LinearLayout
