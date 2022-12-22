@@ -1,5 +1,7 @@
 package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import de.hdmstuttgart.bulletjournalapp.MainActivity;
 import de.hdmstuttgart.bulletjournalapp.MainViewModel;
 import de.hdmstuttgart.bulletjournalapp.Note;
 import de.hdmstuttgart.bulletjournalapp.R;
@@ -88,6 +93,29 @@ public class NotesFragment extends Fragment {
 		viewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
 			if(notes == null) return;
 			adapter = new NoteListAdapter(notes, (note, position) -> {
+				LayoutInflater inflater = getLayoutInflater();
+				View dialogView = inflater.inflate(R.layout.new_note_layout, null);
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setView(dialogView);
+
+				final EditText title = dialogView.findViewById(R.id.ET_Title);
+				final EditText content = dialogView.findViewById(R.id.ET_Content);
+				title.setText(note.getTitle());
+				content.setText(note.getContent());
+
+				builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						note.setTitle(title.getText().toString());
+						note.setContent(content.getText().toString());
+						viewModel.update(note);
+					}
+				});
+				builder.setNegativeButton("Cancel", null);
+
+				AlertDialog dialog = builder.create();
+				dialog.show();
 			});
 			recyclerView.setAdapter(adapter);
 		});
@@ -96,8 +124,26 @@ public class NotesFragment extends Fragment {
 		view.findViewById(R.id.extended_fab_note).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Note note = new Note("New Note", "New Note");
-				viewModel.insert(note);
+				LayoutInflater inflater = getLayoutInflater();
+				View dialogView = inflater.inflate(R.layout.new_note_layout, null);
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setView(dialogView);
+
+				final EditText title = dialogView.findViewById(R.id.ET_Title);
+				final EditText content = dialogView.findViewById(R.id.ET_Content);
+
+				builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Note newNote = new Note(title.getText().toString(),content.getText().toString());
+						viewModel.insert(newNote);
+					}
+				});
+				builder.setNegativeButton("Cancel", null);
+
+				AlertDialog dialog = builder.create();
+				dialog.show();
 			}
 		});
 	}

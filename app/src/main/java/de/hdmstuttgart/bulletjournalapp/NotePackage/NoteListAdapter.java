@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 	public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
 		Note note = NoteList.get(position);
 
+		holder.dateNotePreview.setText(note.getEditDateAsDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")).toString());
 		holder.titleNotePreview.setText(note.getTitle());
 		holder.contentNotePreview.setText(note.getContent());
 
@@ -66,12 +68,14 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 
 	static class NoteViewHolder extends RecyclerView.ViewHolder {
 
+		TextView dateNotePreview;
 		TextView titleNotePreview;
 		TextView contentNotePreview;
 
 		public NoteViewHolder(@NonNull View itemView){
 			super(itemView);
 
+			dateNotePreview = itemView.findViewById(R.id.TV_Date);
 			titleNotePreview = itemView.findViewById(R.id.titleNotePre);
 			contentNotePreview = itemView.findViewById(R.id.contentTextNotePre);
 		}

@@ -32,4 +32,7 @@ public class MainViewModel extends AndroidViewModel {
 	public void delete(Note note) {
 		noteRepository.delete(note);
 	}
+	public void update(Note note) {
+		noteRepository.update(note);
+	}
 }
