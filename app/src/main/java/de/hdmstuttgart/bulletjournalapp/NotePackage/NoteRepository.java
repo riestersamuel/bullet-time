@@ -1,10 +1,14 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+
+import de.hdmstuttgart.bulletjournalapp.AppDatabase;
+import de.hdmstuttgart.bulletjournalapp.Note;
+import de.hdmstuttgart.bulletjournalapp.NoteDao;
 
 public class NoteRepository {
 
