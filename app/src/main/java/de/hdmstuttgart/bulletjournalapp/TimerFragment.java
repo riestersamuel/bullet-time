@@ -83,16 +83,17 @@ public class TimerFragment extends Fragment {
 		// Defining the UI elements
 		ExtendedFloatingActionButton extended_fab_start = getView().findViewById(R.id.extended_fab_start);
 		ExtendedFloatingActionButton extended_fab_stop = getView().findViewById(R.id.extended_fab_stop);
-		FloatingActionButton small_fab_pause = getView().findViewById(R.id.small_fab_pause);
 		TextView information_text = getView().findViewById(R.id.information_text);
 		TextView remaining_time = getView().findViewById(R.id.remaining_time);
+		remaining_time.setText("");
+		information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
 
 		// Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
 		// Every minute, change the UI (60000 milliseconds)
-		// TODO: Diese Klasse auslagern
+		// TODO: Diese Klasse auslagern und die millisInFuture wieder zurück auf 1500000 setzen
 		CountDownTimer timer = new CountDownTimer(1500000, 60000) {
 			// The remaining minutes
-
+			int breakCounter = 0;
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -101,17 +102,42 @@ public class TimerFragment extends Fragment {
 
 			@Override
 			public void onFinish() {
-				information_text.setText("Finished");
-			}
+				// End the animation
+				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+				clockAnimation.setVisibility(View.INVISIBLE);
+				((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
+				// Add +1 to the pause counter
+				breakCounter++;
+				// If pause counter % 4 == 0, then take a longer break
+					// Change the UI to break
+					information_text.setText("minutes of your long pause remain. Enjoy the break!");
+					// Create the short break timer with a duration of 15 minutes
+					CountDownTimer shortBreakTimer = new CountDownTimer(900000, 60000) {
+						@Override
+						public void onTick(long millisUntilFinished) {
+							int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+							//remaining_time.setText("" + remainingTime);
+							remaining_time.setText("Hello");
+						}
+
+						@Override
+						public void onFinish() {
+							information_text.setText("Finished");
+						}
+					};
+					// Start the timer
+					// Show animation
+				}
 		};
 
 		// Adding ClickListeners to the buttons
 		extended_fab_start.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				remaining_time.setText("25");
+				information_text.setText("minutes of your pomodoro session remain. Focus on your most important task!");
 				extended_fab_start.setVisibility(View.INVISIBLE);
 				extended_fab_stop.setVisibility(View.VISIBLE);
-				small_fab_pause.setVisibility(View.VISIBLE);
 				timer.start();
 
 				// That's for the timer animation
@@ -128,18 +154,17 @@ public class TimerFragment extends Fragment {
 		extended_fab_stop.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				information_text.setText("You stopped the timer. Start a new one.");
 				extended_fab_start.setVisibility(View.VISIBLE);
 				extended_fab_stop.setVisibility(View.INVISIBLE);
-				small_fab_pause.setVisibility(View.INVISIBLE);
 				timer.cancel();
 				// Reset the remaining time
-				remaining_time.setText("25");
+				remaining_time.setText("");
 
 				// That's for the timer animation
 				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
 				clockAnimation.setVisibility(View.INVISIBLE);
 				((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
-
 			}
 		});
 	}
