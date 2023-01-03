@@ -1,4 +1,5 @@
 package de.hdmstuttgart.bulletjournalapp;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -69,8 +71,9 @@ public class TimerFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		// Must be last line of this method
-		return inflater.inflate(R.layout.fragment_timer, container, false);
+		View view = inflater.inflate(R.layout.fragment_timer, container, false);
+
+		return view;
 	}
 
 	@Override
@@ -110,6 +113,15 @@ public class TimerFragment extends Fragment {
 				extended_fab_stop.setVisibility(View.VISIBLE);
 				small_fab_pause.setVisibility(View.VISIBLE);
 				timer.start();
+
+				// That's for the timer animation
+				// Get a reference to the ImageView
+				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+				clockAnimation.setVisibility(View.VISIBLE);
+				// Set the animation-list drawable as the src attribute
+				clockAnimation.setImageResource(R.drawable.clock_animation);
+				// Start the animation
+				((AnimationDrawable) clockAnimation.getDrawable()).start();
 			}
 		});
 
@@ -122,6 +134,12 @@ public class TimerFragment extends Fragment {
 				timer.cancel();
 				// Reset the remaining time
 				remaining_time.setText("25");
+
+				// That's for the timer animation
+				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+				clockAnimation.setVisibility(View.INVISIBLE);
+				((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
+
 			}
 		});
 	}
