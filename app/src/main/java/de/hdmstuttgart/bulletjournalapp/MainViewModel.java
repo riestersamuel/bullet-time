@@ -19,6 +19,7 @@ public class MainViewModel extends AndroidViewModel {
 		super(application);
 		this.noteRepository = new NoteRepository(application);
 		allNotes = noteRepository.getAll();
+
 	}
 
 	public LiveData<List<Note>>  getAllNotes() {
@@ -28,14 +29,15 @@ public class MainViewModel extends AndroidViewModel {
 		return noteRepository.getNotesByKeyword(keyword);
 	}
 
-	public void insert(Note note) {
+	public void insertNote(Note note) {
 		noteRepository.insert(note);
 	}
-
-	public void delete(Note note) {
+	public void deleteNote(Note note) {
 		noteRepository.delete(note);
 	}
-	public void update(Note note) {
+	public void updateNote(Note note) {
 		noteRepository.update(note);
 	}
+
+
 }
