@@ -7,10 +7,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -21,10 +22,9 @@ import android.widget.SearchView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import de.hdmstuttgart.bulletjournalapp.MainActivity;
 import de.hdmstuttgart.bulletjournalapp.MainViewModel;
+import de.hdmstuttgart.bulletjournalapp.NewNoteFragment;
 import de.hdmstuttgart.bulletjournalapp.Note;
 import de.hdmstuttgart.bulletjournalapp.R;
 
@@ -80,12 +80,19 @@ public class NotesFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		// Get the ViewModel
+		viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+		if (getArguments() != null) {
+			Date = getArguments().getString(ARG_PARAM1);
+		}
+
 		RecyclerView recyclerView = view.findViewById(R.id.RecyclerViewNotes);
 		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		recyclerView.setHasFixedSize(true);
 
 		adapter = new NoteListAdapter(new ArrayList<>(), (note, position) -> {}, (note, position) -> {});
 
+		// set search view listener to filter notes
 		SearchView searchView = view.findViewById(R.id.searchBarNotes);
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -97,29 +104,9 @@ public class NotesFragment extends Fragment {
 			public boolean onQueryTextChange(String newText) {
 				viewModel.getNotesByKeyword(newText).observe(getViewLifecycleOwner(), notes -> {
 					recyclerView.setAdapter(new NoteListAdapter(notes, (note, position) -> {
-						LayoutInflater inflater = getLayoutInflater();
-						View dialogView = inflater.inflate(R.layout.new_note_layout, null);
-
-						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-						builder.setView(dialogView);
-
-						final EditText title = dialogView.findViewById(R.id.ET_Title);
-						final EditText content = dialogView.findViewById(R.id.ET_Content);
-						title.setText(note.getTitle());
-						content.setText(note.getContent());
-
-						builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								note.setTitle(title.getText().toString());
-								note.setContent(content.getText().toString());
-								viewModel.update(note);
-							}
-						});
-						builder.setNegativeButton("Cancel", null);
-
-						AlertDialog dialog = builder.create();
-						dialog.show();
+						FragmentManager fragmentManager = getParentFragmentManager();
+						NewNoteFragment newNoteFragment = NewNoteFragment.newInstance(note.getTitle(),note.getContent(), note);
+						fragmentManager.beginTransaction().replace(R.id.fragment_container, newNoteFragment).commit();
 					}, (note, position) -> {
 						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 						builder.setTitle("Delete Note");
@@ -127,7 +114,7 @@ public class NotesFragment extends Fragment {
 						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								viewModel.delete(note);
+								viewModel.deleteNote(note);
 							}
 						});
 						builder.setNegativeButton("No", null);
@@ -138,36 +125,17 @@ public class NotesFragment extends Fragment {
 			}
 		});
 
-		viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-		if (getArguments() != null) {
-			Date = getArguments().getString(ARG_PARAM1);
-		}
+
+
+
+		// Get all notes from the database and display them in the recyclerview
 		viewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
 			if(notes == null) return;
 			adapter = new NoteListAdapter(notes, (note, position) -> {
-				LayoutInflater inflater = getLayoutInflater();
-				View dialogView = inflater.inflate(R.layout.new_note_layout, null);
+				FragmentManager fragmentManager = getParentFragmentManager();
+				NewNoteFragment newNoteFragment = NewNoteFragment.newInstance(note.getTitle(),note.getContent(), note);
+				fragmentManager.beginTransaction().replace(R.id.fragment_container, newNoteFragment).commit();
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setView(dialogView);
-
-				final EditText title = dialogView.findViewById(R.id.ET_Title);
-				final EditText content = dialogView.findViewById(R.id.ET_Content);
-				title.setText(note.getTitle());
-				content.setText(note.getContent());
-
-				builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						note.setTitle(title.getText().toString());
-						note.setContent(content.getText().toString());
-						viewModel.update(note);
-					}
-				});
-				builder.setNegativeButton("Cancel", null);
-
-				AlertDialog dialog = builder.create();
-				dialog.show();
 			}, (note, position) -> {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle("Delete Note");
@@ -175,7 +143,7 @@ public class NotesFragment extends Fragment {
 				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						viewModel.delete(note);
+						viewModel.deleteNote(note);
 					}
 				});
 				builder.setNegativeButton("No", null);
@@ -185,29 +153,14 @@ public class NotesFragment extends Fragment {
 		});
 
 		notes = viewModel.getAllNotes();
+
+		//set setOnItemClickListener for the FAB to open the NewNoteFragment
 		view.findViewById(R.id.extended_fab_note).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LayoutInflater inflater = getLayoutInflater();
-				View dialogView = inflater.inflate(R.layout.new_note_layout, null);
-
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setView(dialogView);
-
-				final EditText title = dialogView.findViewById(R.id.ET_Title);
-				final EditText content = dialogView.findViewById(R.id.ET_Content);
-
-				builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Note newNote = new Note(title.getText().toString(),content.getText().toString());
-						viewModel.insert(newNote);
-					}
-				});
-				builder.setNegativeButton("Cancel", null);
-
-				AlertDialog dialog = builder.create();
-				dialog.show();
+				FragmentManager fragmentManager = getParentFragmentManager();
+				NewNoteFragment newNoteFragment = NewNoteFragment.newInstance(null,null, null);
+				fragmentManager.beginTransaction().replace(R.id.fragment_container, newNoteFragment).commit();
 			}
 		});
 	}
