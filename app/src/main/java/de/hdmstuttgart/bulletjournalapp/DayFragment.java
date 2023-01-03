@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +61,14 @@ public class DayFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_day, container, false);
+		View view = inflater.inflate(R.layout.fragment_day, container, false);
+
+		// Get a reference to the MaterialToolbar view
+		MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
+
+		// Set the title for the MaterialToolbar
+		topBarTitle.setTitle("Day");
+
+		return view;
 	}
 }

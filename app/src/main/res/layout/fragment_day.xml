@@ -19,11 +19,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:background="@color/md_theme_light_surface"
+                android:elevation="4dp"
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar"
-                app:title="Today, 8th December" />
+                />
             <!--        app:navigationIcon="@drawable/ic_baseline_dashboard_24" -->
 
 
