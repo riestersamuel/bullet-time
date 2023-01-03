@@ -88,10 +88,40 @@ public class TimerFragment extends Fragment {
 		remaining_time.setText("");
 		information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
 
+		CountDownTimer shortBreakTimer = new CountDownTimer(5000, 6000) {
+			@Override
+			public void onTick(long millisUntilFinished) {
+				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				remaining_time.setText("" + remainingTime);
+				information_text.setText("minutes of your short break remain. Enjoy the break!");
+			}
+
+			@Override
+			public void onFinish() {
+				// Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
+				extended_fab_start.callOnClick();
+			}
+		};
+
+		CountDownTimer longBreakTimer = new CountDownTimer(5000, 6000) {
+			@Override
+			public void onTick(long millisUntilFinished) {
+				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				remaining_time.setText("" + remainingTime);
+				information_text.setText("minutes of your long break remain. Enjoy the break!");
+			}
+
+			@Override
+			public void onFinish() {
+				// Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
+				extended_fab_start.callOnClick();
+			}
+		};
+
 		// Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
 		// Every minute, change the UI (60000 milliseconds)
-		// TODO: Diese Klasse auslagern und die millisInFuture wieder zurück auf 1500000 setzen
-		CountDownTimer timer = new CountDownTimer(1500000, 60000) {
+		// TODO: Diese Klasse auslagern und die millisInFuture wieder zurück auf 1500000 und den countdownInterval auf 60000 setzen
+		CountDownTimer timer = new CountDownTimer(5000, 6000) {
 			// The remaining minutes
 			int breakCounter = 0;
 			@Override
@@ -106,27 +136,13 @@ public class TimerFragment extends Fragment {
 				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
 				clockAnimation.setVisibility(View.INVISIBLE);
 				((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
-				// Add +1 to the pause counter
 				breakCounter++;
-				// If pause counter % 4 == 0, then take a longer break
-					// Change the UI to break
-					information_text.setText("minutes of your long pause remain. Enjoy the break!");
-					// Create the short break timer with a duration of 15 minutes
-					CountDownTimer shortBreakTimer = new CountDownTimer(900000, 60000) {
-						@Override
-						public void onTick(long millisUntilFinished) {
-							int remainingTime = (int) (millisUntilFinished / 60000 + 1);
-							//remaining_time.setText("" + remainingTime);
-							remaining_time.setText("Hello");
-						}
-
-						@Override
-						public void onFinish() {
-							information_text.setText("Finished");
-						}
-					};
-					// Start the timer
-					// Show animation
+				if (breakCounter % 4 == 0) {
+					longBreakTimer.start();
+				}
+				else {
+					shortBreakTimer.start();
+				}
 				}
 		};
 
