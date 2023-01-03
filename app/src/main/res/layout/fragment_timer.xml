@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B7882B"
+    android:background="#eae7d9"
     tools:context=".TimerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +80,9 @@
                 android:id="@+id/information_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:text="minutes \nremaining"
                 android:textAlignment="center" />
 
         </LinearLayout>

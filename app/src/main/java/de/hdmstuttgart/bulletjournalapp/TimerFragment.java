@@ -88,12 +88,12 @@ public class TimerFragment extends Fragment {
 		remaining_time.setText("");
 		information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
 
-		CountDownTimer shortBreakTimer = new CountDownTimer(5000, 6000) {
+		CountDownTimer shortBreakTimer = new CountDownTimer(300000, 60000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
 				remaining_time.setText("" + remainingTime);
-				information_text.setText("minutes of your short break remain. Enjoy the break!");
+				information_text.setText("minutes of your short break remain. \nEnjoy the break!");
 			}
 
 			@Override
@@ -103,7 +103,7 @@ public class TimerFragment extends Fragment {
 			}
 		};
 
-		CountDownTimer longBreakTimer = new CountDownTimer(5000, 6000) {
+		CountDownTimer longBreakTimer = new CountDownTimer(900000, 60000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -120,8 +120,8 @@ public class TimerFragment extends Fragment {
 
 		// Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
 		// Every minute, change the UI (60000 milliseconds)
-		// TODO: Diese Klasse auslagern und die millisInFuture wieder zurück auf 1500000 und den countdownInterval auf 60000 setzen
-		CountDownTimer timer = new CountDownTimer(5000, 6000) {
+		// TODO: Diese Klasse auslagern
+		CountDownTimer timer = new CountDownTimer(1500000, 60000) {
 			// The remaining minutes
 			int breakCounter = 0;
 			@Override
@@ -139,9 +139,11 @@ public class TimerFragment extends Fragment {
 				breakCounter++;
 				if (breakCounter % 4 == 0) {
 					longBreakTimer.start();
+					startAnimation();
 				}
 				else {
 					shortBreakTimer.start();
+					startAnimation();
 				}
 				}
 		};
@@ -151,7 +153,7 @@ public class TimerFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				remaining_time.setText("25");
-				information_text.setText("minutes of your pomodoro session remain. Focus on your most important task!");
+				information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
 				extended_fab_start.setVisibility(View.INVISIBLE);
 				extended_fab_stop.setVisibility(View.VISIBLE);
 				timer.start();
@@ -176,12 +178,25 @@ public class TimerFragment extends Fragment {
 				timer.cancel();
 				// Reset the remaining time
 				remaining_time.setText("");
-
-				// That's for the timer animation
-				ImageView clockAnimation = view.findViewById(R.id.clock_animation);
-				clockAnimation.setVisibility(View.INVISIBLE);
-				((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
+				// End the animation
+				stopAnimation();
 			}
 		});
+	}
+
+	private void startAnimation(){
+		// That's for the timer animation
+		View view = super.getView();
+		ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+		clockAnimation.setVisibility(View.VISIBLE);
+		((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).start();
+	}
+
+	private void stopAnimation(){
+		// That's for the timer animation
+		View view = super.getView();
+		ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+		clockAnimation.setVisibility(View.INVISIBLE);
+		((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
 	}
 }
