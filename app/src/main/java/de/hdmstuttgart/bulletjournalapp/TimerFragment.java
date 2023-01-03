@@ -166,6 +166,10 @@ public class TimerFragment extends Fragment {
 				clockAnimation.setImageResource(R.drawable.clock_animation);
 				// Start the animation
 				((AnimationDrawable) clockAnimation.getDrawable()).start();
+
+				// Hide tomato image
+				ImageView tomato = view.findViewById(R.id.tomatoImage);
+				tomato.setVisibility(View.GONE);
 			}
 		});
 
@@ -180,6 +184,9 @@ public class TimerFragment extends Fragment {
 				remaining_time.setText("");
 				// End the animation
 				stopAnimation();
+				// Hide tomato image
+				ImageView tomato = view.findViewById(R.id.tomatoImage);
+				tomato.setVisibility(View.GONE);
 			}
 		});
 	}
