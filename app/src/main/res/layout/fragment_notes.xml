@@ -11,8 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/md_theme_light_surface"
+                android:elevation="4dp"
+                app:menu="@menu/notes_top_app_bar" />
+            <!--        app:navigationIcon="@drawable/ic_baseline_dashboard_24" -->
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <android.widget.SearchView
             android:id="@+id/searchBarNotes"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
@@ -28,7 +48,9 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/searchBarNotes"
             tools:layout_editor_absoluteX="411dp"
-            tools:listitem="@layout/note_preview" />
+            tools:listitem="@layout/note_preview" >
+
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

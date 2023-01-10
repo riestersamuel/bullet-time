@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -72,6 +73,12 @@ public class TimerFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_timer, container, false);
+
+		// Get a reference to the MaterialToolbar view
+		MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
+
+		// Set the title for the MaterialToolbar
+		topBarTitle.setTitle("Pomodoro Timer");
 
 		return view;
 	}
