@@ -8,9 +8,4 @@
         android:title="datePicker"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/more"
-        android:title="more"
-        app:showAsAction="never" />
-
 </menu>

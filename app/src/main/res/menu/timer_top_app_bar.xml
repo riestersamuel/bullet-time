@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/more"
-        android:title="more"
-        app:showAsAction="never" />
+        android:id="@+id/help"
+        android:title="help"
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        app:showAsAction="ifRoom" />
 
 </menu>

@@ -5,12 +5,7 @@
     <item
         android:id="@+id/date_picker"
         android:icon="@drawable/ic_baseline_search_24"
-        android:title="datePicker"
+        android:title="search"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/more"
-        android:title="more"
-        app:showAsAction="never" />
 
 </menu>
