@@ -25,6 +25,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TimerFragment extends Fragment {
 
+	CountDownTimer timer;
+	CountDownTimer shortBreakTimer;
+	CountDownTimer longBreakTimer;
+
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -75,10 +79,10 @@ public class TimerFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_timer, container, false);
 
 		// Get a reference to the MaterialToolbar view
-		MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
+		MaterialToolbar topBar = view.findViewById(R.id.topAppBar);
 
 		// Set the title for the MaterialToolbar
-		topBarTitle.setTitle("Pomodoro Timer");
+		topBar.setTitle("Pomodoro Timer");
 
 		return view;
 	}
@@ -96,7 +100,7 @@ public class TimerFragment extends Fragment {
 		//information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
 		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
 
-		CountDownTimer shortBreakTimer = new CountDownTimer(5000, 1000) {
+		shortBreakTimer = new CountDownTimer(5000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -111,7 +115,7 @@ public class TimerFragment extends Fragment {
 			}
 		};
 
-		CountDownTimer longBreakTimer = new CountDownTimer(5000, 1000) {
+		longBreakTimer = new CountDownTimer(5000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -129,7 +133,7 @@ public class TimerFragment extends Fragment {
 		// Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
 		// Every minute, change the UI (60000 milliseconds)
 		// TODO: Diese Klasse auslagern
-		CountDownTimer timer = new CountDownTimer(5000, 1000) {
+		timer = new CountDownTimer(5000, 1000) {
 			// The remaining minutes
 			int breakCounter = 0;
 			@Override
@@ -188,6 +192,8 @@ public class TimerFragment extends Fragment {
 				extended_fab_start.setVisibility(View.VISIBLE);
 				extended_fab_stop.setVisibility(View.INVISIBLE);
 				timer.cancel();
+				shortBreakTimer.cancel();
+				longBreakTimer.cancel();
 				// Reset the remaining time
 				remaining_time.setText("");
 				// End the animation
@@ -213,5 +219,14 @@ public class TimerFragment extends Fragment {
 		ImageView clockAnimation = view.findViewById(R.id.clock_animation);
 		clockAnimation.setVisibility(View.INVISIBLE);
 		((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		// Stop the timer when the fragment is paused
+		if (timer!=null) timer.cancel();
+		if(shortBreakTimer!=null) shortBreakTimer.cancel();
+		if(longBreakTimer!=null) longBreakTimer.cancel();
 	}
 }
