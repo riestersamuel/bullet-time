@@ -1,5 +1,8 @@
 package de.hdmstuttgart.bulletjournalapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
@@ -7,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
@@ -117,6 +121,7 @@ public class TimerFragment extends Fragment {
             public void onFinish() {
                 // Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
                 extended_fab_start.callOnClick();
+				showShortBreakNotification();
             }
         };
 
@@ -132,6 +137,7 @@ public class TimerFragment extends Fragment {
             public void onFinish() {
                 // Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
                 extended_fab_start.callOnClick();
+				showLongBreakNotification();
             }
         };
 
@@ -162,7 +168,8 @@ public class TimerFragment extends Fragment {
                     shortBreakTimer.start();
                     startAnimation();
                 }
-            }
+				showTimerFinishedNotification();
+			}
         };
 
         // Adding ClickListeners to the buttons
@@ -245,4 +252,75 @@ public class TimerFragment extends Fragment {
         if (shortBreakTimer != null) shortBreakTimer.cancel();
         if (longBreakTimer != null) longBreakTimer.cancel();
     }
+
+	// Notifications for the normal timer
+	private void showTimerFinishedNotification() {
+		// Create a notification channel
+		String channelId = "timer_finished";
+		String channelName = "Timer Finished";
+		int importance = NotificationManager.IMPORTANCE_HIGH;
+		NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+		// Get the notification manager
+		NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.createNotificationChannel(channel);
+
+		// Create a notification builder
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+				.setSmallIcon(R.drawable.ic_baseline_timer_24)
+				.setContentTitle("Pomodoro Timer")
+				.setContentText("Time's up! Starting a short break now.")
+				.setAutoCancel(true);
+
+		// Show the notification
+		notificationManager.notify(1, builder.build());
+	}
+
+	// Notifications for the short break timer
+	private void showShortBreakNotification() {
+		// Create a notification channel
+		String channelId = "short_break";
+		String channelName = "Short Break";
+		int importance = NotificationManager.IMPORTANCE_HIGH;
+		NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+		// Get the notification manager
+		NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.createNotificationChannel(channel);
+
+		// Create a notification builder
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+				.setSmallIcon(R.drawable.ic_baseline_timer_24)
+				.setContentTitle("Pomodoro Timer")
+				.setContentText("Break over! Starting a new session now.")
+				.setAutoCancel(true);
+
+		// Show the notification
+		notificationManager.notify(2, builder.build());
+	}
+
+	// Notifications for the long break timer
+	private void showLongBreakNotification() {
+		// Create a notification channel
+		String channelId = "long_break";
+		String channelName = "Long Break";
+		int importance = NotificationManager.IMPORTANCE_HIGH;
+		NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+		// Get the notification manager
+		NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.createNotificationChannel(channel);
+
+		// Create a notification builder
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+				.setSmallIcon(R.drawable.ic_baseline_timer_24)
+				.setContentTitle("Pomodoro Timer")
+				.setContentText("Break over! Starting a new pomodoro session now.")
+				.setAutoCancel(true);
+
+		// Show the notification
+		notificationManager.notify(3, builder.build());
+	}
+
+
 }
