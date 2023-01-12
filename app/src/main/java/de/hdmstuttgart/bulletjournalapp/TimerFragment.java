@@ -96,7 +96,7 @@ public class TimerFragment extends Fragment {
 		//information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
 		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
 
-		CountDownTimer shortBreakTimer = new CountDownTimer(300000, 60000) {
+		CountDownTimer shortBreakTimer = new CountDownTimer(5000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -111,7 +111,7 @@ public class TimerFragment extends Fragment {
 			}
 		};
 
-		CountDownTimer longBreakTimer = new CountDownTimer(900000, 60000) {
+		CountDownTimer longBreakTimer = new CountDownTimer(5000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				int remainingTime = (int) (millisUntilFinished / 60000 + 1);
@@ -129,7 +129,7 @@ public class TimerFragment extends Fragment {
 		// Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
 		// Every minute, change the UI (60000 milliseconds)
 		// TODO: Diese Klasse auslagern
-		CountDownTimer timer = new CountDownTimer(1500000, 60000) {
+		CountDownTimer timer = new CountDownTimer(5000, 1000) {
 			// The remaining minutes
 			int breakCounter = 0;
 			@Override
