@@ -93,7 +93,8 @@ public class TimerFragment extends Fragment {
 		TextView information_text = getView().findViewById(R.id.information_text);
 		TextView remaining_time = getView().findViewById(R.id.remaining_time);
 		remaining_time.setText("");
-		information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
+		//information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
+		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
 
 		CountDownTimer shortBreakTimer = new CountDownTimer(300000, 60000) {
 			@Override
