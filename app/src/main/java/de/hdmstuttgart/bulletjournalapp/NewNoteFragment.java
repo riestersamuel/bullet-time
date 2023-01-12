@@ -35,7 +35,7 @@ public class NewNoteFragment extends Fragment {
 	private String mParam2;
 	private Note note;
 	boolean isEdit;
-
+	boolean isSave = false;
 	MainViewModel viewModel;
 
 	public NewNoteFragment() {
@@ -68,7 +68,7 @@ public class NewNoteFragment extends Fragment {
 			mParam1 = getArguments().getString(ARG_PARAM1);
 			mParam2 = getArguments().getString(ARG_PARAM2);
 		}
-		if(note != null) {
+		if (note != null) {
 			isEdit = true;
 		}
 		viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
@@ -85,30 +85,43 @@ public class NewNoteFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		//sets the title and the content of the note
-		((TextView) view.findViewById(R.id.ET_Title)).setText(mParam1);
-		((TextView) view.findViewById(R.id.ET_Content)).setText(mParam2);
+		if (isEdit) {
+			((TextView) view.findViewById(R.id.ET_Title)).setText(mParam1);
+			((TextView) view.findViewById(R.id.ET_Content)).setText(mParam2);
+			((TextView) view.findViewById(R.id.Label_New_Note)).setText("Edit Note:");
+		}
+
 
 		// save changes or new note
-		view.findViewById(R.id.bt_save).setOnClickListener(v -> {
+		view.findViewById(R.id.bt_back).setOnClickListener(v -> {
 			String title = ((EditText) view.findViewById(R.id.ET_Title)).getText().toString();
 			String content = ((EditText) view.findViewById(R.id.ET_Content)).getText().toString();
-			if (isEdit) {
+			update_Note(title, content);
+			FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
+		});
+	}
+
+	@Override
+	public void onDestroyView() {
+		String title = ((EditText) requireView().findViewById(R.id.ET_Title)).getText().toString();
+		String content = ((EditText) requireView().findViewById(R.id.ET_Content)).getText().toString();
+		update_Note(title, content);
+		super.onDestroyView();
+	}
+
+	private void update_Note(String title, String content){
+		if (isEdit && (!content.equals(mParam2) || !title.equals(mParam1)) && !isSave) {
+			if(!title.equals("") && !content.equals("")) {
 				note.setTitle(title);
 				note.setContent(content);
 				viewModel.updateNote(note);
-			} else {
-				Note note = new Note(title, content);
-				viewModel.insertNote(note);
+				isSave = true;
 			}
-
-			FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-			fragmentManager.beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
-		});
-
-
-		view.findViewById(R.id.bt_back).setOnClickListener(v -> {
-			FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-			fragmentManager.beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
-		});
+		} else if(!isEdit && !(content.isEmpty() && title.isEmpty()) && !isSave) {
+			Note note = new Note(title, content);
+			viewModel.insertNote(note);
+			isSave = true;
+		}
 	}
 }

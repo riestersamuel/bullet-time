@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/date_picker"
+        android:id="@+id/searchBut"
         android:icon="@drawable/ic_baseline_search_24"
-        android:title="datePicker"
+        android:title="searchBut"
         app:showAsAction="ifRoom" />
 
     <item

@@ -15,15 +15,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdmstuttgart.bulletjournalapp.MainViewModel;
 import de.hdmstuttgart.bulletjournalapp.NewNoteFragment;
@@ -67,8 +72,6 @@ public class NotesFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
 	}
 
 	@Override
@@ -90,6 +93,17 @@ public class NotesFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
+		toolbar.setOnMenuItemClickListener(item -> {
+			if (item.getItemId() == R.id.searchBut) {
+				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
+				searchView.setVisibility(View.VISIBLE);
+				searchView.callOnClick();
+				searchView.requestFocus();
+				return true;
+			}
+			return false;
+		});
 
 		// Get the ViewModel
 		viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -135,9 +149,10 @@ public class NotesFragment extends Fragment {
 				return true;
 			}
 		});
-
-
-
+		searchView.setOnCloseListener(() -> {
+			searchView.setVisibility(View.GONE);
+			return false;
+		});
 
 		// Get all notes from the database and display them in the recyclerview
 		viewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
@@ -176,9 +191,11 @@ public class NotesFragment extends Fragment {
 		});
 	}
 
-	private void loadNotes() {
-		//Todo: load notes from database with note_preview layout
+	@Override
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+		inflater.inflate(R.menu.notes_top_app_bar, menu);
 	}
 
 
 }
+
