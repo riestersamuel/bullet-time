@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
 import android.os.Bundle;
 
@@ -14,9 +14,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Objects;
-
-import de.hdmstuttgart.bulletjournalapp.NotePackage.NotesFragment;
+import de.hdmstuttgart.bulletjournalapp.MainViewModel;
+import de.hdmstuttgart.bulletjournalapp.R;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

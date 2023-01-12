@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.TimerPackage;
 
 import android.os.CountDownTimer;
 

@@ -1,16 +1,14 @@
 package de.hdmstuttgart.bulletjournalapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import de.hdmstuttgart.bulletjournalapp.DayPackage.DayFragment;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.NotesFragment;
+import de.hdmstuttgart.bulletjournalapp.TimerPackage.TimerFragment;
 
 public class MainActivity extends AppCompatActivity {
 

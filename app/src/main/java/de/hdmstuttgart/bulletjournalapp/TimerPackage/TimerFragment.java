@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.TimerPackage;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,16 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import de.hdmstuttgart.bulletjournalapp.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -163,11 +162,10 @@ public class TimerFragment extends Fragment {
                 breakCounter++;
                 if (breakCounter % 4 == 0) {
                     longBreakTimer.start();
-                    startAnimation();
                 } else {
                     shortBreakTimer.start();
-                    startAnimation();
                 }
+				startAnimation();
 				showTimerFinishedNotification();
 			}
         };

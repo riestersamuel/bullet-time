@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdmstuttgart.bulletjournalapp.Note;
 import de.hdmstuttgart.bulletjournalapp.R;
 
 public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteViewHolder>{

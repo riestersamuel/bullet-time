@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;

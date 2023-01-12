@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.NoteRepository;
 
 public class MainViewModel extends AndroidViewModel {

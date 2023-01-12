@@ -1,4 +1,4 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
 import android.os.Bundle;
 
@@ -7,13 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import de.hdmstuttgart.bulletjournalapp.R;
 
 /**
  * A simple {@link Fragment} subclass.

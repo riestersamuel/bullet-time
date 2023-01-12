@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,22 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdmstuttgart.bulletjournalapp.MainViewModel;
-import de.hdmstuttgart.bulletjournalapp.NewNoteFragment;
-import de.hdmstuttgart.bulletjournalapp.Note;
 import de.hdmstuttgart.bulletjournalapp.R;
 
 /**

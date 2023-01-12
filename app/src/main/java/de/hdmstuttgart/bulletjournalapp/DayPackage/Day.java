@@ -1,8 +1,11 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdmstuttgart.bulletjournalapp.Bullet;
+import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 
 public class Day {
 	private final LocalDateTime date;

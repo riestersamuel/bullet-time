@@ -7,8 +7,6 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.hdmstuttgart.bulletjournalapp.AppDatabase;
-import de.hdmstuttgart.bulletjournalapp.Note;
-import de.hdmstuttgart.bulletjournalapp.NoteDao;
 
 public class NoteRepository {
 
