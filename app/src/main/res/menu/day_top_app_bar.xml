@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/date_picker"
-        android:icon="@drawable/ic_baseline_calendar_month_24"
+        android:id="@+id/day_before"
+        android:icon="@drawable/baseline_navigate_before_24"
+        android:title="datePicker"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/next_day"
+        android:icon="@drawable/baseline_navigate_next_24"
         android:title="datePicker"
         app:showAsAction="ifRoom" />
 

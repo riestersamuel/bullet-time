@@ -9,12 +9,16 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
+import de.hdmstuttgart.bulletjournalapp.DayPackage.Day;
+import de.hdmstuttgart.bulletjournalapp.DayPackage.DayDao;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.NoteDao;
 
-@Database(entities = {Note.class}, version = 1)
+@Database(entities = {Note.class, Day.class},  version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 	public abstract NoteDao noteDao();
+	public abstract DayDao dayDao();
 
 	private static volatile AppDatabase INSTANCE;
 
