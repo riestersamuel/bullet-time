@@ -3,7 +3,10 @@ package de.hdmstuttgart.bulletjournalapp.DayPackage;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +16,16 @@ import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 
 @Entity
 public class Day {
+
 	@PrimaryKey
-	public LocalDateTime date;
+	public long date;
 
 	@Embedded
-	public List<Bullet> bullets;
+	public ArrayList<Bullet> bullets;
 
-	public Day(LocalDateTime date, List<Bullet> bullets) {
+	public Day(long date, ArrayList<Bullet> bullets) {
 		this.date = date;
 		this.bullets = bullets;
 	}
+
 }
