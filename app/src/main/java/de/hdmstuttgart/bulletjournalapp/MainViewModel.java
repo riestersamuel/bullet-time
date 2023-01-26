@@ -8,19 +8,22 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.hdmstuttgart.bulletjournalapp.DayPackage.Day;
+import de.hdmstuttgart.bulletjournalapp.DayPackage.DayRepository;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.NoteRepository;
 
 public class MainViewModel extends AndroidViewModel {
 
+	private final DayRepository dayRepository;
 	private final NoteRepository noteRepository;
 	private final LiveData<List<Note>> allNotes;
 
-	public MainViewModel(@NonNull Application application) {
+	public MainViewModel(@NonNull Application application, DayRepository dayRepository) {
 		super(application);
 		this.noteRepository = new NoteRepository(application);
+		this.dayRepository = dayRepository;
 		allNotes = noteRepository.getAll();
-
 	}
 
 	public LiveData<List<Note>>  getAllNotes() {
@@ -40,5 +43,11 @@ public class MainViewModel extends AndroidViewModel {
 		noteRepository.update(note);
 	}
 
+	public void insertNewDay(Day day) {
+		dayRepository.insertNewDay(day);
+	}
+	public void getDay(String date) {
+		dayRepository.getDay(date);
+	}
 
 }

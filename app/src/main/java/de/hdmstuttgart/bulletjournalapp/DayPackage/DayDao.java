@@ -22,7 +22,7 @@ public interface DayDao {
     void delete(Day day);
 
     @Query("SELECT * FROM day WHERE date = :date")
-    Day getByDate(long date);
+    Day getByDate(String date);
 
     @Query("SELECT * FROM day")
     LiveData<List<Day>> getAll();

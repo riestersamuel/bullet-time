@@ -85,7 +85,10 @@ public class DayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
 
-        //TODO: Load today's day from database and display the bullets
+        // TODO: Load today's day from database and display the bullets
+        // if day != null dann neues day objekt erstellen
+
+
 
         // Get today's date
         // Create a Date object
@@ -126,6 +129,7 @@ public class DayFragment extends Fragment {
         // Arrows in top bar
         //TODO: Datenbankanknüpfung mit den Pfeilen
             // 1. Schicht: MainViewModel, 2. Neues Repository, 3. DayDAO, 4. Tatsächliche Datenbank
+
 
         // Floating action buttons
         extended_fab_new_bullet.setOnClickListener(new View.OnClickListener() {
