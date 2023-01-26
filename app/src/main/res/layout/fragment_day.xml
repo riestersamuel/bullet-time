@@ -32,7 +32,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/extended_fab"
+            android:id="@+id/extended_fab_new_bullet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
@@ -41,6 +41,54 @@
             app:icon="@drawable/ic_baseline_expand_circle_down_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            app:layout_constraintBottom_toTopOf="@+id/extended_fab_new_bullet"
+            app:layout_constraintEnd_toEndOf="@id/extended_fab_new_bullet"
+            android:id="@+id/small_fab_note"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_baseline_dashboard_24"
+            android:visibility="gone"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            app:layout_constraintBottom_toTopOf="@+id/small_fab_note"
+            app:layout_constraintEnd_toEndOf="@id/extended_fab_new_bullet"
+            android:id="@+id/small_fab_event"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_baseline_event_note_24"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:visibility="gone"
+            />
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            app:layout_constraintBottom_toTopOf="@+id/small_fab_event"
+            app:layout_constraintEnd_toEndOf="@id/extended_fab_new_bullet"
+            android:id="@+id/small_fab_daily_task"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_baseline_search_24"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:visibility="gone"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            app:layout_constraintBottom_toTopOf="@+id/small_fab_daily_task"
+            app:layout_constraintEnd_toEndOf="@id/extended_fab_new_bullet"
+            android:id="@+id/small_fab_daily_highlight"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/baseline_star_24"
+            android:visibility="gone"
+            style="?attr/floatingActionButtonSmallStyle"
+            />
+
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewBullets"

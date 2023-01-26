@@ -176,8 +176,8 @@ public class TimerFragment extends Fragment {
             public void onClick(View v) {
                 remaining_time.setText("25");
                 information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
-                extended_fab_start.setVisibility(View.INVISIBLE);
-                extended_fab_stop.setVisibility(View.VISIBLE);
+                extended_fab_start.hide();
+                extended_fab_stop.show();
                 timer.start();
 
                 // That's for the timer animation
@@ -199,8 +199,8 @@ public class TimerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 information_text.setText("You stopped the timer. Start a new one.");
-                extended_fab_start.setVisibility(View.VISIBLE);
-                extended_fab_stop.setVisibility(View.INVISIBLE);
+                extended_fab_start.show();
+                extended_fab_stop.hide();
                 timer.cancel();
                 shortBreakTimer.cancel();
                 longBreakTimer.cancel();

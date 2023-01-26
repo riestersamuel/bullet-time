@@ -2,6 +2,8 @@ package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -72,13 +76,10 @@ public class DayFragment extends Fragment {
 
         // Create a Date object
         Date currentDate = Calendar.getInstance().getTime();
-
         // Create a SimpleDateFormat object with the desired format
         SimpleDateFormat sdf = new SimpleDateFormat("dd. MMMM");
-
         // Use the SimpleDateFormat object to format the Date object
         String formattedDate = sdf.format(currentDate);
-
         // Get a reference to the MaterialToolbar view
         MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
 
@@ -86,5 +87,45 @@ public class DayFragment extends Fragment {
         topBarTitle.setTitle("Today, " + formattedDate);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Defining the UI elements
+        ExtendedFloatingActionButton extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
+        FloatingActionButton small_fab_note = getView().findViewById(R.id.small_fab_note);
+        FloatingActionButton small_fab_event = getView().findViewById(R.id.small_fab_event);
+        FloatingActionButton small_fab_daily_task = getView().findViewById(R.id.small_fab_daily_task);
+        FloatingActionButton small_fab_daily_highlight = getView().findViewById(R.id.small_fab_daily_highlight);
+
+        // Setting clicklisteners
+        extended_fab_new_bullet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                extended_fab_new_bullet.hide();
+                small_fab_note.show();
+                small_fab_event.show();
+                small_fab_daily_task.show();
+                small_fab_daily_highlight.show();
+            }
+        });
+        small_fab_note.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {}
+        });
+        small_fab_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {}
+        });
+        small_fab_daily_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {}
+        });
+        small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {}
+        });
     }
 }
