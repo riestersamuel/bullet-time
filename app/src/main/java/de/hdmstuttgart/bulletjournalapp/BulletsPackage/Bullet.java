@@ -8,6 +8,12 @@ public class Bullet {
 
 	private boolean isChecked;
 
+	public Bullet(String content, BulletCategories category) {
+		this.content = content;
+		this.category = category;
+		this.isChecked = false;
+	}
+
 	public Bullet(String content, int id, BulletCategories category, boolean isChecked) {
 		this.content = content;
 		this.id = id;

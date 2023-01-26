@@ -1,5 +1,6 @@
 package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
+import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -17,13 +18,13 @@ import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 @Entity
 public class Day {
 
-	@PrimaryKey
-	public long date;
+	@PrimaryKey @NonNull
+	public String date;
 
 	@Embedded
 	public ArrayList<Bullet> bullets;
 
-	public Day(long date, ArrayList<Bullet> bullets) {
+	public Day(String date, ArrayList<Bullet> bullets) {
 		this.date = date;
 		this.bullets = bullets;
 	}
