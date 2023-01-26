@@ -95,9 +95,9 @@ public class DayFragment extends Fragment {
 
         // Defining the UI elements
         ExtendedFloatingActionButton extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
-        FloatingActionButton small_fab_note = getView().findViewById(R.id.small_fab_note);
+        FloatingActionButton small_fab_note = getView().findViewById(R.id.fab_note);
         FloatingActionButton small_fab_event = getView().findViewById(R.id.small_fab_event);
-        FloatingActionButton small_fab_daily_task = getView().findViewById(R.id.small_fab_daily_task);
+        FloatingActionButton small_fab_task = getView().findViewById(R.id.small_fab_task);
         FloatingActionButton small_fab_daily_highlight = getView().findViewById(R.id.small_fab_daily_highlight);
 
         // Setting clicklisteners
@@ -107,25 +107,59 @@ public class DayFragment extends Fragment {
                 extended_fab_new_bullet.hide();
                 small_fab_note.show();
                 small_fab_event.show();
-                small_fab_daily_task.show();
+                small_fab_task.show();
                 small_fab_daily_highlight.show();
             }
         });
         small_fab_note.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+                extended_fab_new_bullet.show();
+                hideSmallFABs();
+            }
         });
         small_fab_event.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+                extended_fab_new_bullet.show();
+                hideSmallFABs();
+            }
         });
-        small_fab_daily_task.setOnClickListener(new View.OnClickListener() {
+        small_fab_task.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+                extended_fab_new_bullet.show();
+                hideSmallFABs();
+            }
         });
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
         });
+    }
+
+    // Method to hide the small FABs
+    FloatingActionButton small_fab_note;
+    FloatingActionButton small_fab_event;
+    FloatingActionButton small_fab_task;
+    FloatingActionButton small_fab_daily_highlight;
+
+    public void hideSmallFABs() {
+        if (small_fab_note == null) {
+            small_fab_note = getView().findViewById(R.id.fab_note);
+        }
+        if (small_fab_event == null) {
+            small_fab_event = getView().findViewById(R.id.small_fab_event);
+        }
+        if (small_fab_task == null) {
+            small_fab_task = getView().findViewById(R.id.small_fab_task);
+        }
+        if (small_fab_daily_highlight == null) {
+            small_fab_daily_highlight = getView().findViewById(R.id.small_fab_daily_highlight);
+        }
+        small_fab_note.hide();
+        small_fab_event.hide();
+        small_fab_task.hide();
+        small_fab_daily_highlight.hide();
     }
 }
