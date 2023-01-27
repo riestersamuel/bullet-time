@@ -19,10 +19,10 @@ public class MainViewModel extends AndroidViewModel {
 	private final NoteRepository noteRepository;
 	private final LiveData<List<Note>> allNotes;
 
-	public MainViewModel(@NonNull Application application, DayRepository dayRepository) {
+	public MainViewModel(@NonNull Application application) {
 		super(application);
 		this.noteRepository = new NoteRepository(application);
-		this.dayRepository = dayRepository;
+		this.dayRepository = new DayRepository(application);
 		allNotes = noteRepository.getAll();
 	}
 
@@ -46,8 +46,8 @@ public class MainViewModel extends AndroidViewModel {
 	public void insertNewDay(Day day) {
 		dayRepository.insertNewDay(day);
 	}
-	public void getDay(String date) {
-		dayRepository.getDay(date);
+	public Day getDay(String date) {
+		return dayRepository.getDay(date);
 	}
 
 }

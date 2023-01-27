@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import java.util.Date;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.BulletCategories;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.BulletListAdapter;
+import de.hdmstuttgart.bulletjournalapp.MainViewModel;
 import de.hdmstuttgart.bulletjournalapp.R;
 
 /**
@@ -34,6 +36,9 @@ import de.hdmstuttgart.bulletjournalapp.R;
  */
 public class DayFragment extends Fragment {
 
+    MainViewModel viewModel;
+
+    // This is just a sample to test the recycler view
     Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
     ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
         add(sampleBullet);
@@ -84,11 +89,12 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
+        return view;
+    }
 
-        // TODO: Load today's day from database and display the bullets
-        // if day != null dann neues day objekt erstellen
-
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // Get today's date
         // Create a Date object
@@ -103,17 +109,23 @@ public class DayFragment extends Fragment {
         // Set the title for the MaterialToolbar
         topBarTitle.setTitle("Today, " + formattedDate);
 
-        return view;
-    }
+        // TODO: Load today's day from database and display the bullets
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        // If there's no entry for today, create a new one
+        Day today;
+        if (viewModel.getDay(formattedDate) != null) {
+            today = viewModel.getDay(formattedDate);
+        } else {
+            viewModel.insertNewDay(new Day(formattedDate, new ArrayList<Bullet>()));
+            today = viewModel.getDay(formattedDate);
+        }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        // TODO: Finish this
+        // Load the bullets for the current day
         // RecyclerView
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        BulletListAdapter bulletListAdapter = new BulletListAdapter(sampleDay.bullets);
+        BulletListAdapter bulletListAdapter = new BulletListAdapter(today.bullets);
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
 
@@ -165,7 +177,10 @@ public class DayFragment extends Fragment {
         });
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {}
+            public void onClick(View v) {
+                extended_fab_new_bullet.show();
+                hideSmallFABs();
+            }
         });
     }
 

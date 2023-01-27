@@ -40,7 +40,8 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
 
     @Override
     public int getItemCount() {
-        return bulletList.size();
+        if (bulletList == null) return 0;
+        else return bulletList.size();
     }
 
     public class BulletViewHolder extends RecyclerView.ViewHolder{
