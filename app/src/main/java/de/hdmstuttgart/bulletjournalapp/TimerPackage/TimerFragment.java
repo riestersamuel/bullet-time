@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,6 +25,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import de.hdmstuttgart.bulletjournalapp.R;
+import de.hdmstuttgart.bulletjournalapp.TimerHolder;
+import de.hdmstuttgart.bulletjournalapp.TimerService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,9 +36,14 @@ import de.hdmstuttgart.bulletjournalapp.R;
 
 public class TimerFragment extends Fragment {
 
-    CountDownTimer timer;
-    CountDownTimer shortBreakTimer;
-    CountDownTimer longBreakTimer;
+    private CountDownTimer timer;
+	private CountDownTimer shortBreakTimer;
+	private CountDownTimer longBreakTimer;
+	private Intent timerServiceIntent;
+	private Intent shortBreakServiceIntent;
+	private Intent longBreakServiceIntent;
+	private boolean isTimerRunning;
+	private long remainingTime;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,11 +84,9 @@ public class TimerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+	}
 
-
-    }
-
-    @Override
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -99,19 +105,43 @@ public class TimerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         // Defining the UI elements
         ExtendedFloatingActionButton extended_fab_start = getView().findViewById(R.id.extended_fab_start);
         ExtendedFloatingActionButton extended_fab_stop = getView().findViewById(R.id.extended_fab_stop);
         TextView information_text = getView().findViewById(R.id.information_text);
-        TextView remaining_time = getView().findViewById(R.id.remaining_time);
-        remaining_time.setText("");
-        //information_text.setText("Focus session: Start a pomodoro timer and only focus on your most important task for the next 25 minutes. No distractions allowed! After that, take a 5 minute break and repeat the process. After four focussed sessions, take a longer break of 15 minutes and afterwards restart the process.");
-        information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
+		TextView remaining_time = getView().findViewById(R.id.remaining_time);
+		if(TimerHolder.getInstance().getTimer() != null) {
+			information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
+			extended_fab_start.hide();
+			extended_fab_stop.show();
 
-        shortBreakTimer = new CountDownTimer(5000, 1000) {
+			timer = TimerHolder.getInstance().getTimer();
+			// That's for the timer animation
+			// Get a reference to the ImageView
+			ImageView clockAnimation = view.findViewById(R.id.clock_animation);
+			clockAnimation.setVisibility(View.VISIBLE);
+			// Set the animation-list drawable as the src attribute
+			clockAnimation.setImageResource(R.drawable.clock_animation);
+			// Start the animation
+			((AnimationDrawable) clockAnimation.getDrawable()).start();
+			remaining_time.setText(String.valueOf(remainingTime));
+			// Hide tomato image
+			ImageView tomato = view.findViewById(R.id.tomatoImage);
+			tomato.setVisibility(View.GONE);
+			startAnimation(view);
+		}
+
+
+
+
+
+
+        shortBreakTimer = new CountDownTimer(300000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				remainingTime = (int) (millisUntilFinished / 60000 + 1);
                 remaining_time.setText("" + remainingTime);
                 information_text.setText("minutes of your short break remain. \nEnjoy the break!");
             }
@@ -119,15 +149,17 @@ public class TimerFragment extends Fragment {
             @Override
             public void onFinish() {
                 // Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
-                extended_fab_start.callOnClick();
+				requireContext().stopService(shortBreakServiceIntent);
+				timerServiceIntent = new Intent(getActivity(), TimerService.class);
+				TimerHolder.getInstance().setTimer(timer);
+				requireContext().startService(timerServiceIntent);
 				showShortBreakNotification();
             }
         };
-
-        longBreakTimer = new CountDownTimer(5000, 1000) {
+        longBreakTimer = new CountDownTimer(1200000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+                remainingTime = (int) (millisUntilFinished / 60000 + 1);
                 remaining_time.setText("" + remainingTime);
                 information_text.setText("minutes of your long break remain. Enjoy the break!");
             }
@@ -135,7 +167,10 @@ public class TimerFragment extends Fragment {
             @Override
             public void onFinish() {
                 // Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
-                extended_fab_start.callOnClick();
+				requireContext().stopService(longBreakServiceIntent);
+				timerServiceIntent = new Intent(getActivity(), TimerService.class);
+				TimerHolder.getInstance().setTimer(timer);
+				requireContext().startService(timerServiceIntent);
 				showLongBreakNotification();
             }
         };
@@ -143,13 +178,13 @@ public class TimerFragment extends Fragment {
         // Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
         // Every minute, change the UI (60000 milliseconds)
         // TODO: Diese Klasse auslagern
-        timer = new CountDownTimer(5000, 1000) {
-            // The remaining minutes
-            int breakCounter = 0;
+        timer = new CountDownTimer(1500000, 1000) {
+			// The remaining minutes
+			int breakCounter = 0;
 
             @Override
             public void onTick(long millisUntilFinished) {
-                int remainingTime = (int) (millisUntilFinished / 60000 + 1);
+                remainingTime = (int) (millisUntilFinished / 60000 + 1);
                 remaining_time.setText("" + remainingTime);
             }
 
@@ -161,11 +196,20 @@ public class TimerFragment extends Fragment {
                 ((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
                 breakCounter++;
                 if (breakCounter % 4 == 0) {
-                    longBreakTimer.start();
+					if(longBreakServiceIntent == null) {
+						longBreakServiceIntent = new Intent(getActivity(), TimerService.class);
+						TimerHolder.getInstance().setLongBreakTimer(longBreakTimer);
+						requireContext().startService(longBreakServiceIntent);
+					}
                 } else {
-                    shortBreakTimer.start();
+					if(shortBreakServiceIntent == null) {
+						shortBreakServiceIntent = new Intent(getActivity(), TimerService.class);
+						TimerHolder.getInstance().setShortBreakTimer(shortBreakTimer);
+						shortBreakTimer.start();
+						requireContext().startService(shortBreakServiceIntent);
+					}
                 }
-				startAnimation();
+				startAnimation(view);
 				showTimerFinishedNotification();
 			}
         };
@@ -178,7 +222,11 @@ public class TimerFragment extends Fragment {
                 information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
                 extended_fab_start.hide();
                 extended_fab_stop.show();
-                timer.start();
+				if(timerServiceIntent == null){
+					timerServiceIntent = new Intent(getActivity(), TimerService.class);
+					TimerHolder.getInstance().setTimer(timer);
+					requireContext().startService(timerServiceIntent);
+				}
 
                 // That's for the timer animation
                 // Get a reference to the ImageView
@@ -226,12 +274,14 @@ public class TimerFragment extends Fragment {
         });
     }
 
-    private void startAnimation() {
+    private void startAnimation(View view) {
         // That's for the timer animation
-        View view = super.getView();
+		ImageView tomato = view.findViewById(R.id.tomatoImage);
+		tomato.setVisibility(View.GONE);
         ImageView clockAnimation = view.findViewById(R.id.clock_animation);
         clockAnimation.setVisibility(View.VISIBLE);
-        ((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).start();
+		clockAnimation.setImageResource(R.drawable.clock_animation);
+		((AnimationDrawable)clockAnimation.getDrawable()).start();
     }
 
     private void stopAnimation() {
