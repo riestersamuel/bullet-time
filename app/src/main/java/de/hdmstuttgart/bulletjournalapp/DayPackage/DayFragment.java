@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -40,12 +41,11 @@ public class DayFragment extends Fragment {
 
     MainViewModel viewModel;
 
-    // This is just a sample to test the recycler view
-    Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
-    ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
-        add(sampleBullet);
-    }};
-    Day sampleDay = new Day(LocalDateTime.now().toString(), bullets);
+    private Calendar calendar = Calendar.getInstance();
+    private Calendar todayCalendar = Calendar.getInstance();
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+    private MaterialToolbar topBarTitle;
+    String date;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,6 +91,7 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
+
         return view;
     }
 
@@ -98,27 +99,53 @@ public class DayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get today's date
-        Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd. MMMM");
-        String formattedDate = sdf.format(currentDate);
-        MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
-
-        // Set the title for the MaterialToolbar
-        topBarTitle.setTitle("Today, " + formattedDate);
+        topBarTitle = view.findViewById(R.id.topAppBar);
+        updateDate();
 
         // Notiz zum Datenzugriff: 1. Schicht: MainViewModel, 2. DayRepository, 3. DayDAO, 4. Tatsächliche Datenbank mit Queries
+
+        // TODO: Linking the icons in top bar to load the next/previous day and its bullets
+        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
+        MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.next_day) {
+                calendar.add(Calendar.DATE, 1);
+                updateDate();
+                return true;
+            }
+            else if (item.getItemId() == R.id.today){
+                calendar = Calendar.getInstance();
+                updateDate();
+
+                return true;
+            }
+            else if (item.getItemId() == R.id.day_before){
+                calendar.add(Calendar.DATE, -1);
+                updateDate();
+
+                return true;
+            }
+            return false;
+        });
 
         // Load today's day from database and display the bullets
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         // If there's no entry for today, create a new one
         Day today;
-        if (viewModel.getDay(formattedDate) != null) {
-            today = viewModel.getDay(formattedDate);
+        if (viewModel.getDay(date) != null) {
+            today = viewModel.getDay(date);
         } else {
-            viewModel.insertNewDay(new Day(formattedDate, new ArrayList<Bullet>()));
-            today = viewModel.getDay(formattedDate);
+            viewModel.insertNewDay(new Day(date, new ArrayList<Bullet>()));
+            today = viewModel.getDay(date);
         }
+
+
+        // This is just a sample to test the recycler view
+        Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
+        ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
+            add(sampleBullet);
+        }};
+        Day sampleDay = new Day(LocalDateTime.now().toString(), bullets);
 
         // Load the bullets for the current day
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
@@ -127,24 +154,18 @@ public class DayFragment extends Fragment {
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
 
-        // TODO: Linking the arrows in top bar to load the next/previous day and its bullets
-        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
-        MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
-        toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.next_day) {
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String date = dateFormat.format(calendar.getTime());
-                calendar.add(Calendar.DATE, 1);
-                topBarTitle.setTitle("Today, " + date);
-                return true;
-            }
-            else if (item.getItemId() == R.id.day_before){
-                // Code
-                return true;
-            }
-            return false;
-        });
+
+        MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
+        // Get today's date NEW
+        topBarTitle = view.findViewById(R.id.topAppBar);
+        updateDate();
+
+        // Get today's date OLD
+        //Date currentDate = Calendar.getInstance().getTime();
+        //SimpleDateFormat sdf = new SimpleDateFormat("dd. MMMM");
+        //String formattedDate = sdf.format(currentDate);
+        //MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
+        //topBarTitle.setTitle("Today, " + formattedDate);
 
         // Defining the FABs
         ExtendedFloatingActionButton extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
@@ -219,4 +240,24 @@ public class DayFragment extends Fragment {
         small_fab_task.hide();
         small_fab_daily_highlight.hide();
     }
-}
+
+    private void updateDate() {
+        date = dateFormat.format(calendar.getTime());
+        // Adding custom titles for today, yesterday and tomorrow
+        if (calendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
+                && calendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
+                && calendar.get(Calendar.DATE) == todayCalendar.get(Calendar.DATE)) {
+            topBarTitle.setTitle("Today, " + date);
+        } else if (calendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
+                && calendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
+                && calendar.get(Calendar.DATE) == todayCalendar.get(Calendar.DATE) - 1) {
+            topBarTitle.setTitle("Yesterday, " + date);
+        } else if (calendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)
+                && calendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH)
+                && calendar.get(Calendar.DATE) == todayCalendar.get(Calendar.DATE) + 1) {
+            topBarTitle.setTitle("Tomorrow, " + date);
+        } else {
+            topBarTitle.setTitle(date);
+        }
+        }
+    }
