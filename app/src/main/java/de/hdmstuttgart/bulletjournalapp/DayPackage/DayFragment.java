@@ -1,5 +1,7 @@
 package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -97,19 +99,17 @@ public class DayFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get today's date
-        // Create a Date object
         Date currentDate = Calendar.getInstance().getTime();
-        // Create a SimpleDateFormat object with the desired format
         SimpleDateFormat sdf = new SimpleDateFormat("dd. MMMM");
-        // Use the SimpleDateFormat object to format the Date object
         String formattedDate = sdf.format(currentDate);
-        // Get a reference to the MaterialToolbar view
         MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
 
         // Set the title for the MaterialToolbar
         topBarTitle.setTitle("Today, " + formattedDate);
 
-        // TODO: Load today's day from database and display the bullets
+        // Notiz zum Datenzugriff: 1. Schicht: MainViewModel, 2. DayRepository, 3. DayDAO, 4. Tatsächliche Datenbank mit Queries
+
+        // Load today's day from database and display the bullets
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         // If there's no entry for today, create a new one
         Day today;
@@ -120,30 +120,40 @@ public class DayFragment extends Fragment {
             today = viewModel.getDay(formattedDate);
         }
 
-        // TODO: Finish this
         // Load the bullets for the current day
-        // RecyclerView
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         BulletListAdapter bulletListAdapter = new BulletListAdapter(today.bullets);
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
 
-        // Defining the UI elements
+        // TODO: Linking the arrows in top bar to load the next/previous day and its bullets
+        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
+        MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.next_day) {
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String date = dateFormat.format(calendar.getTime());
+                calendar.add(Calendar.DATE, 1);
+                topBarTitle.setTitle("Today, " + date);
+                return true;
+            }
+            else if (item.getItemId() == R.id.day_before){
+                // Code
+                return true;
+            }
+            return false;
+        });
+
+        // Defining the FABs
         ExtendedFloatingActionButton extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
         FloatingActionButton small_fab_note = getView().findViewById(R.id.fab_note);
         FloatingActionButton small_fab_event = getView().findViewById(R.id.small_fab_event);
         FloatingActionButton small_fab_task = getView().findViewById(R.id.small_fab_task);
         FloatingActionButton small_fab_daily_highlight = getView().findViewById(R.id.small_fab_daily_highlight);
 
-        // Setting clicklisteners
-
-        // Arrows in top bar
-        //TODO: Datenbankanknüpfung mit den Pfeilen
-            // 1. Schicht: MainViewModel, 2. Neues Repository, 3. DayDAO, 4. Tatsächliche Datenbank
-
-
-        // Floating action buttons
+        // TODO: Setting clicklisteners for the FABs
         extended_fab_new_bullet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +167,8 @@ public class DayFragment extends Fragment {
         small_fab_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }
@@ -189,7 +201,6 @@ public class DayFragment extends Fragment {
     FloatingActionButton small_fab_event;
     FloatingActionButton small_fab_task;
     FloatingActionButton small_fab_daily_highlight;
-
     public void hideSmallFABs() {
         if (small_fab_note == null) {
             small_fab_note = getView().findViewById(R.id.fab_note);
