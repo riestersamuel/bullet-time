@@ -1,6 +1,5 @@
-package de.hdmstuttgart.bulletjournalapp;
+package de.hdmstuttgart.bulletjournalapp.TimerPackage;
 
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -9,9 +8,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import java.security.Provider;
-import java.util.List;
-import java.util.Map;
+import de.hdmstuttgart.bulletjournalapp.R;
+import de.hdmstuttgart.bulletjournalapp.TimerPackage.TimerHolder;
 
 public class TimerService extends Service {
 

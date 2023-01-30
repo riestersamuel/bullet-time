@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -25,8 +24,6 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import de.hdmstuttgart.bulletjournalapp.R;
-import de.hdmstuttgart.bulletjournalapp.TimerHolder;
-import de.hdmstuttgart.bulletjournalapp.TimerService;
 
 /**
  * A simple {@link Fragment} subclass.
