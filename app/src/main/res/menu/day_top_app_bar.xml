@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/today"
+        android:icon="@drawable/baseline_mode_standby_24"
+        android:title="datePicker"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/next_day"
         android:icon="@drawable/baseline_navigate_next_24"
         android:title="datePicker"
