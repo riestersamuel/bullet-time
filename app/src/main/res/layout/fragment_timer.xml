@@ -66,13 +66,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/appBarLayout">
 
+            <ProgressBar
+                android:id="@+id/progressBarTimer"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:indeterminateOnly="false"
+                android:progress="20"
+                android:progressDrawable="@drawable/circle"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/tomatoImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="-80dp"
-                android:src="@drawable/tomato_sketch"
-                />
+                android:src="@drawable/tomato_sketch" />
 
             <ImageView
                 android:id="@+id/clock_animation"
