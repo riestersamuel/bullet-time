@@ -97,6 +97,10 @@ public class DayFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        topBarTitle = view.findViewById(R.id.topAppBar);
+        updateDate();
+
+
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         // Notiz zum Datenzugriff: 1. Schicht: MainViewModel, 2. DayRepository, 3. DayDAO, 4. Tatsächliche Datenbank mit Queries
@@ -172,8 +176,7 @@ public class DayFragment extends Fragment {
         });
 
         MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
-
-        // Show the date of the current day
+        // Get today's date NEW
         topBarTitle = view.findViewById(R.id.topAppBar);
         updateDate();
 
