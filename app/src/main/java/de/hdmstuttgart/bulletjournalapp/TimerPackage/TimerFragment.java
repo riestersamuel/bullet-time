@@ -1,5 +1,6 @@
 package de.hdmstuttgart.bulletjournalapp.TimerPackage;
 
+import android.animation.ObjectAnimator;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -17,7 +18,9 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -109,6 +112,10 @@ public class TimerFragment extends Fragment {
         ExtendedFloatingActionButton extended_fab_stop = getView().findViewById(R.id.extended_fab_stop);
         TextView information_text = getView().findViewById(R.id.information_text);
 		TextView remaining_time = getView().findViewById(R.id.remaining_time);
+		ProgressBar progressBar = getView().findViewById(R.id.progressBarTimer);
+		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
+
+
 		if(TimerHolder.getInstance().getTimer() != null) {
 			information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
 			extended_fab_start.hide();
@@ -127,18 +134,21 @@ public class TimerFragment extends Fragment {
 			// Hide tomato image
 			ImageView tomato = view.findViewById(R.id.tomatoImage);
 			tomato.setVisibility(View.GONE);
+			progressBar.setVisibility(View.VISIBLE);
 			startAnimation(view);
 		}
 
 
-
-
-
-
         shortBreakTimer = new CountDownTimer(300000, 1000) {
+			final double onePercent = (double)100/300000;
             @Override
             public void onTick(long millisUntilFinished) {
 				remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				int progress = (int)(onePercent * millisUntilFinished);
+				ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress",progress);
+				animation.setDuration(1000); // 0.5 second
+				animation.setInterpolator(new DecelerateInterpolator());
+				animation.start();
                 remaining_time.setText("" + remainingTime);
                 information_text.setText("minutes of your short break remain. \nEnjoy the break!");
             }
@@ -154,9 +164,15 @@ public class TimerFragment extends Fragment {
             }
         };
         longBreakTimer = new CountDownTimer(1200000, 1000) {
+			final double onePercent = (double)100/1200000;
             @Override
             public void onTick(long millisUntilFinished) {
-                remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				int progress = (int)(onePercent * millisUntilFinished);
+				ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress",progress);
+				animation.setDuration(500); // 0.5 second
+				animation.setInterpolator(new DecelerateInterpolator());
+				animation.start();
                 remaining_time.setText("" + remainingTime);
                 information_text.setText("minutes of your long break remain. Enjoy the break!");
             }
@@ -178,10 +194,16 @@ public class TimerFragment extends Fragment {
         timer = new CountDownTimer(1500000, 1000) {
 			// The remaining minutes
 			int breakCounter = 0;
+			final double onePercent = (double)100/1500000;
 
             @Override
             public void onTick(long millisUntilFinished) {
                 remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				int progress = (int)(onePercent * millisUntilFinished);
+				ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress",progress);
+				animation.setDuration(1000); // 0.5 second
+				animation.setInterpolator(new DecelerateInterpolator());
+				animation.start();
                 remaining_time.setText("" + remainingTime);
             }
 
@@ -237,6 +259,9 @@ public class TimerFragment extends Fragment {
                 // Hide tomato image
                 ImageView tomato = view.findViewById(R.id.tomatoImage);
                 tomato.setVisibility(View.GONE);
+
+				ProgressBar progressBar = view.findViewById(R.id.progressBarTimer);
+				progressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -247,6 +272,14 @@ public class TimerFragment extends Fragment {
                 extended_fab_start.show();
                 extended_fab_stop.hide();
                 timer.cancel();
+				requireContext().stopService(timerServiceIntent);
+				TimerHolder.getInstance().setTimer(null);
+				TimerHolder.getInstance().setShortBreakTimer(null);
+				TimerHolder.getInstance().setLongBreakTimer(null);
+				timerServiceIntent = null;
+				progressBar.setVisibility(View.INVISIBLE);
+				progressBar.setProgress(0);
+
                 shortBreakTimer.cancel();
                 longBreakTimer.cancel();
                 // Reset the remaining time
@@ -255,7 +288,7 @@ public class TimerFragment extends Fragment {
                 stopAnimation();
                 // Hide tomato image
                 ImageView tomato = view.findViewById(R.id.tomatoImage);
-                tomato.setVisibility(View.GONE);
+                tomato.setVisibility(View.VISIBLE);
             }
         });
 
