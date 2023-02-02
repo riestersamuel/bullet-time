@@ -13,12 +13,12 @@ import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 public class Converters {
     @TypeConverter
     public static ArrayList<String> fromString(String value) {
-        Type listType = new TypeToken<ArrayList<Day>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<Bullet>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromArrayList(ArrayList<Day> list) {
+    public static String fromArrayList(ArrayList<Bullet> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;

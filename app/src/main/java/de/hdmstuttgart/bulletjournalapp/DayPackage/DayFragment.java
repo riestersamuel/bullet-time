@@ -1,7 +1,5 @@
 package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,17 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.BulletCategories;
@@ -98,62 +95,105 @@ public class DayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         topBarTitle = view.findViewById(R.id.topAppBar);
         updateDate();
 
         // Notiz zum Datenzugriff: 1. Schicht: MainViewModel, 2. DayRepository, 3. DayDAO, 4. Tatsächliche Datenbank mit Queries
 
-        // TODO: Linking the icons in top bar to load the next/previous day and its bullets
+        // Linking the icons in top bar to load the next/previous day and its bullets
         // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
         MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.next_day) {
                 calendar.add(Calendar.DATE, 1);
+                //TODO: Hier die Daten aus der Datenbank auslesen bzw. neuen Tag erstellen und entsprechende Bullets reinladen
                 updateDate();
+
+                if (viewModel.getDay(date) != null) {
+                    Day selectedDay = viewModel.getDay(date);
+                    System.out.println("HALLLLLOOOOO HIER 28 " + selectedDay.date + " " + selectedDay + "WICHITG 2: " + selectedDay.bullets);
+                    // Bullets von diesem Tag laden und anzeigen
+                }
+
+                else {
+                    System.out.println("HALLLLLOOOOO HIER 25");
+                    // Insert the day into the database
+                    // Somehow doesn't work yet
+                    Day nowInsertedDay = new Day(date, new ArrayList<Bullet>());
+                    viewModel.insertNewDay(nowInsertedDay);
+                    // WAIT FOR THE DAY TO BE INSERTED
+                    System.out.println("HALLLLLOOOOO HIER 26 " + nowInsertedDay.date + " " + nowInsertedDay);
+                }
+                // See today
                 return true;
             }
             else if (item.getItemId() == R.id.today){
                 calendar = Calendar.getInstance();
+                // TODO: Hier die Daten aus der Datenbank auslesen bzw. neuen Tag erstellen und entsprechende Bullets reinladen
                 updateDate();
 
+                // If there's a day in the database with the current date load it, otherwise create a new day with the current date
+                System.out.println("HALLLLLOOOOO HIER 1");
+                if (viewModel.getDay(date) != null) {
+                    Day selectedDay = viewModel.getDay(date);
+                    // Bullets von diesem Tag laden und anzeigen
+                    System.out.println("HALLLLLOOOOO HIER 9");
+
+                    // This isn't necessary, it's just for testing purposes. Usually the bullets would be loaded from the database.
+                    Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
+                    ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
+                        add(sampleBullet);
+                    }};
+                    selectedDay.bullets = bullets;
+
+                    // Load the bullets for the current day
+                    RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    BulletListAdapter bulletListAdapter = new BulletListAdapter(selectedDay.bullets);
+                    recyclerView.setAdapter(bulletListAdapter);
+                    recyclerView.setHasFixedSize(true);
+                    // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
+                } else {
+                    System.out.println("HALLLLLOOOOO HIER 2");
+                    viewModel.insertNewDay(new Day(date, new ArrayList<Bullet>()));
+                }
+                System.out.println("HALLLLLOOOOO HIER 3");
                 return true;
             }
             else if (item.getItemId() == R.id.day_before){
                 calendar.add(Calendar.DATE, -1);
                 updateDate();
+                //TODO: Neuen Tag erstellen falls noch keiner vorhanden ist, sonst den Tag aus DB laden
+                if (viewModel.getDay(date) != null) {
+                    Day selectedDay = viewModel.getDay(date);
+                    System.out.println("HALLLLLOOOOO HIER 8 " + selectedDay.date + " " + selectedDay);
+                    // Bullets von diesem Tag laden und anzeigen
+                }
 
+                else {
+                    System.out.println("HALLLLLOOOOO HIER 5");
+                    // Insert the day into the database
+                    // Somehow doesn't work yet
+                    Day nowInsertedDay = new Day(date, new ArrayList<Bullet>());
+                    // dummy bullet
+                    Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
+                    ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
+                        add(sampleBullet);
+                    }};
+                    nowInsertedDay.bullets = bullets;
+
+                    viewModel.insertNewDay(nowInsertedDay);
+                    // WAIT FOR THE DAY TO BE INSERTED
+                    System.out.println("HALLLLLOOOOO HIER 6 " + nowInsertedDay.date + " " + nowInsertedDay + "WICHITG1: " + nowInsertedDay.bullets);
+                }
+
+                System.out.println("HALLLLLOOOOO HIER 7");
                 return true;
             }
             return false;
         });
-
-        // Load today's day from database and display the bullets
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        // If there's no entry for today, create a new one
-        Day today;
-        if (viewModel.getDay(date) != null) {
-            today = viewModel.getDay(date);
-        } else {
-            viewModel.insertNewDay(new Day(date, new ArrayList<Bullet>()));
-            today = viewModel.getDay(date);
-        }
-
-
-        // This is just a sample to test the recycler view
-        Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
-        ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
-            add(sampleBullet);
-        }};
-        Day sampleDay = new Day(LocalDateTime.now().toString(), bullets);
-
-        // Load the bullets for the current day
-        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        BulletListAdapter bulletListAdapter = new BulletListAdapter(today.bullets);
-        recyclerView.setAdapter(bulletListAdapter);
-        recyclerView.setHasFixedSize(true);
-
 
         MaterialToolbar topBarTitle = view.findViewById(R.id.topAppBar);
         // Get today's date NEW
@@ -188,8 +228,9 @@ public class DayFragment extends Fragment {
         small_fab_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                // Get the current day, then add and show a new bullet of type note to the list and save it to the database
+                Day currentDay = viewModel.getDay(date);
+                System.out.println("HALLLLLOOOOO HIER 4 " + currentDay + " -----------------" + date);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }

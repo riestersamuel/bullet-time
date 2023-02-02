@@ -18,7 +18,9 @@ import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 @Entity
 public class Day {
 
-	@PrimaryKey @NonNull
+	@PrimaryKey(autoGenerate = true) @NonNull
+	public int id;
+
 	public String date;
 
 	@Embedded
