@@ -176,13 +176,13 @@ public class DayFragment extends Fragment {
                     System.out.println("HALLLLLOOOOO HIER 5");
                     // Insert the day into the database
                     // Somehow doesn't work yet
-                    Day nowInsertedDay = new Day(date, new ArrayList<Bullet>());
                     // dummy bullet
                     Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
                     ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
                         add(sampleBullet);
                     }};
-                    nowInsertedDay.bullets = bullets;
+                    System.out.println("HALLLLLOOOOO HIER 6" + sampleBullet + "LISTE: " + bullets);
+                    Day nowInsertedDay = new Day(date, bullets);
 
                     viewModel.insertNewDay(nowInsertedDay);
                     // WAIT FOR THE DAY TO BE INSERTED

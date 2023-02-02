@@ -1,5 +1,11 @@
 package de.hdmstuttgart.bulletjournalapp.BulletsPackage;
 
+import androidx.room.Embedded;
+import androidx.room.TypeConverters;
+
+import de.hdmstuttgart.bulletjournalapp.DayPackage.Converters;
+
+
 public class Bullet {
 
 	private String content;

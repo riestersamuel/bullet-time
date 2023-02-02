@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
@@ -23,7 +24,7 @@ public class Day {
 
 	public String date;
 
-	@Embedded
+	@TypeConverters(Converters.class)
 	public ArrayList<Bullet> bullets;
 
 	public Day(String date, ArrayList<Bullet> bullets) {

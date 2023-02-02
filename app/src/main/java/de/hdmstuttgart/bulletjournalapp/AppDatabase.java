@@ -18,10 +18,10 @@ import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 import de.hdmstuttgart.bulletjournalapp.NotePackage.NoteDao;
 
 @Database(entities = {Note.class, Day.class},  version = 2)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 	public abstract NoteDao noteDao();
 	public abstract DayDao dayDao();
-	@TypeConverters({Converters.class})
 
 	private static volatile AppDatabase INSTANCE;
 
