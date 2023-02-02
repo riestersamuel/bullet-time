@@ -50,4 +50,8 @@ public class MainViewModel extends AndroidViewModel {
 		return dayRepository.getDay(date);
 	}
 
+	public void updateDay(Day day) {
+		dayRepository.updateDay(day);
+	}
+
 }

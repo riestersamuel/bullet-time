@@ -23,4 +23,8 @@ public class DayRepository {
     public Day getDay(String date) {
         return dayDao.getByDate(date);
     }
+
+    public void updateDay(Day day) {
+        AppDatabase.databaseWriteExecutor.execute(() -> dayDao.update(day));
+    }
 }

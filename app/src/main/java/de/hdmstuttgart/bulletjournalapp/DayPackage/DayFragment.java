@@ -108,6 +108,16 @@ public class DayFragment extends Fragment {
 
         // Linking the icons in top bar to load the next/previous day and its bullets
         MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
+
+        // Load the bullets for the current day
+        Day currentlySelectedDay = viewModel.getDay(date);
+        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets);
+        recyclerView.setAdapter(bulletListAdapter);
+        recyclerView.setHasFixedSize(true);
+        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
+
         toolbar.setOnMenuItemClickListener(item -> {
             // Next day >
             if (item.getItemId() == R.id.next_day) {
@@ -133,19 +143,12 @@ public class DayFragment extends Fragment {
                 if (viewModel.getDay(date) != null) {
                     Day selectedDay = viewModel.getDay(date);
                     // TODO: Bullets von diesem Tag laden und anzeigen
-                    // This isn't necessary, it's just for testing purposes. Usually the bullets would be loaded from the database.
+                    /* This isn't necessary, it's just for testing purposes. Usually the bullets would be loaded from the database.
                     Bullet sampleBullet = new Bullet("This is a sample bullet", BulletCategories.NOTE);
                     ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
                         add(sampleBullet);
                     }};
-                    selectedDay.bullets = bullets;
-                    // Load the bullets for the current day
-                    RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    BulletListAdapter bulletListAdapter = new BulletListAdapter(selectedDay.bullets);
-                    recyclerView.setAdapter(bulletListAdapter);
-                    recyclerView.setHasFixedSize(true);
-                    // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
+                    selectedDay.bullets = bullets;*/
                 } else {
                     viewModel.insertNewDay(new Day(date, new ArrayList<Bullet>()));
                 }
@@ -203,7 +206,8 @@ public class DayFragment extends Fragment {
             public void onClick(View v) {
                 // Get the current day, then add and show a new bullet of type note to the list and save it to the database
                 Day currentDay = viewModel.getDay(date);
-                System.out.println("HALLLLLOOOOO HIER 4 " + currentDay + " -----------------" + date);
+                currentDay.bullets.add(new Bullet("This is a new note wow", BulletCategories.NOTE));
+                viewModel.updateDay(currentDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }
@@ -211,6 +215,9 @@ public class DayFragment extends Fragment {
         small_fab_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Day currentDay = viewModel.getDay(date);
+                currentDay.bullets.add(new Bullet("This is a new event", BulletCategories.EVENT));
+                viewModel.updateDay(currentDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }
@@ -218,6 +225,9 @@ public class DayFragment extends Fragment {
         small_fab_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Day currentDay = viewModel.getDay(date);
+                currentDay.bullets.add(new Bullet("This is a new task", BulletCategories.TASK));
+                viewModel.updateDay(currentDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }
@@ -225,6 +235,9 @@ public class DayFragment extends Fragment {
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Day currentDay = viewModel.getDay(date);
+                currentDay.bullets.add(new Bullet("This is a new daily highlight", BulletCategories.DAILY_HIGHLIGHT));
+                viewModel.updateDay(currentDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
             }
