@@ -19,8 +19,8 @@ public interface NoteDao {
 	@Delete
 	void delete(Note note);
 
-	@Query("UPDATE note SET title = :title, content = :content WHERE uid = :id")
-	void update(int id, String title, String content);
+	@Query("UPDATE note SET title = :title, content = :content, uriImage = :uriImage WHERE uid = :id")
+	void update(int id, String title, String content, String uriImage);
 
 	@Query("SELECT * FROM note WHERE title LIKE '%' || :keyword || '%'")
 	LiveData<List<Note>> getNotesByKeyword(String keyword);

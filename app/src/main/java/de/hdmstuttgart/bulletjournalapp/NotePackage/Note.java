@@ -16,12 +16,14 @@ public class Note {
 	private String content;
 	private String creationDate;
 	private String editDate;
+	private String uriImage;
 
-	public Note(String title, String content) {
+	public Note(String title, String content, String uriImage) {
 		this.title = title;
 		this.content = content;
 		this.creationDate = LocalDateTime.now().toString();
 		this.editDate = LocalDateTime.now().toString();
+		this.uriImage = uriImage;
 	}
 
 	public String getTitle() {
@@ -62,5 +64,13 @@ public class Note {
 
 	public void setEditDate() {
 		this.editDate = LocalDateTime.now().toString();
+	}
+
+	public String getUriImage() {
+		return uriImage;
+	}
+
+	public void setUriImage(String uriImage) {
+		this.uriImage = uriImage;
 	}
 }

@@ -23,7 +23,7 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 	private onNoteLongClickListener longListener;
 
 	public interface onNoteClickListener {
-		void onMovieClicked(Note note, int position);
+		void onNoteClicked(Note note, int position);
 	}
 
 	public interface onNoteLongClickListener {
@@ -60,7 +60,7 @@ public class NoteListAdapter extends RecyclerView.Adapter <NoteListAdapter.NoteV
 		holder.contentNotePreview.setText(note.getContent());
 
 		holder.itemView.setOnClickListener(v -> {
-			listener.onMovieClicked(note, position);
+			listener.onNoteClicked(note, position);
 		});
 
 		holder.itemView.setOnLongClickListener(v -> {
