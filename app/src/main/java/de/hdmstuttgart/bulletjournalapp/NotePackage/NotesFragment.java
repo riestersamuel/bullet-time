@@ -86,9 +86,12 @@ public class NotesFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
 		MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
+
+
 		toolbar.setOnMenuItemClickListener(item -> {
-			if (item.getItemId() == R.id.searchBut) {
+			if (item.getItemId() == R.id.addImageBut) {
 				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
 				searchView.setVisibility(View.VISIBLE);
 				searchView.callOnClick();
@@ -107,6 +110,7 @@ public class NotesFragment extends Fragment {
 		RecyclerView recyclerView = view.findViewById(R.id.RecyclerViewNotes);
 		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		recyclerView.setHasFixedSize(true);
+
 
 		adapter = new NoteListAdapter(new ArrayList<>(), (note, position) -> {}, (note, position) -> {});
 
