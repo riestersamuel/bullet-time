@@ -199,12 +199,13 @@ public class TimerFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 remainingTime = (int) (millisUntilFinished / 60000 + 1);
+				remaining_time.setText("" + remainingTime+" min");
 				int progress = (int)(onePercent * millisUntilFinished);
 				ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress",progress);
 				animation.setDuration(1000); // 0.5 second
 				animation.setInterpolator(new DecelerateInterpolator());
 				animation.start();
-                remaining_time.setText("" + remainingTime);
+
             }
 
             @Override
