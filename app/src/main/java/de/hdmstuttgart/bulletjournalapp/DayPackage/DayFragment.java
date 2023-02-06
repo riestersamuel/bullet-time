@@ -38,6 +38,7 @@ import de.hdmstuttgart.bulletjournalapp.R;
 public class DayFragment extends Fragment {
 
     MainViewModel viewModel;
+    Day currentlySelectedDay;
     private Calendar calendar = Calendar.getInstance();
     private Calendar todayCalendar = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -110,9 +111,13 @@ public class DayFragment extends Fragment {
         MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
 
         // Load the bullets for the current day
-        Day currentlySelectedDay = viewModel.getDay(date);
+        currentlySelectedDay = viewModel.getDay(date);
+        if(currentlySelectedDay == null) {
+            currentlySelectedDay = new Day(date, new ArrayList<Bullet>());
+            viewModel.insertNewDay(currentlySelectedDay);
+        }
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets);
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
@@ -123,58 +128,33 @@ public class DayFragment extends Fragment {
             if (item.getItemId() == R.id.next_day) {
                 calendar.add(Calendar.DATE, 1);
                 updateDate();
-                // If there's already a day existing with this date, then load its content, otherwise create a new day with this date
-                if (viewModel.getDay(date) != null) {
-                    Day selectedDay = viewModel.getDay(date);
-                    // TODO: Bullets von diesem Tag laden und anzeigen
-                }
-                else {
-                    Day nowInsertedDay = new Day(date, new ArrayList<Bullet>());
-                    viewModel.insertNewDay(nowInsertedDay);
-                }
-                return true;
             }
 
             // Today •
             else if (item.getItemId() == R.id.today){
                 calendar = Calendar.getInstance();
                 updateDate();
-                // If there's already a day existing with this date, then load its content, otherwise create a new day with this date2
-                if (viewModel.getDay(date) != null) {
-                    Day selectedDay = viewModel.getDay(date);
-                    // TODO: Bullets von diesem Tag laden und anzeigen
-                    /* This isn't necessary, it's just for testing purposes. Usually the bullets would be loaded from the database.
-                    Bullet sampleBullet = new Bullet("This is a sample bullet", BulletCategories.NOTE);
-                    ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
-                        add(sampleBullet);
-                    }};
-                    selectedDay.bullets = bullets;*/
-                } else {
-                    viewModel.insertNewDay(new Day(date, new ArrayList<Bullet>()));
-                }
-                return true;
             }
 
             // Previous day <
             else if (item.getItemId() == R.id.day_before){
                 calendar.add(Calendar.DATE, -1);
                 updateDate();
-                // If there's already a day existing with this date, then load its content, otherwise create a new day with this date
-                if (viewModel.getDay(date) != null) {
-                    Day selectedDay = viewModel.getDay(date);
-                    //TODO: Bullets von diesem Tag laden und anzeigen
-                }
-                else {
-                    // This is a dummy bullet
-                    Bullet sampleBullet = new Bullet("Sample Bullet", BulletCategories.NOTE);
-                    ArrayList<Bullet> bullets = new ArrayList<Bullet>(){{
-                        add(sampleBullet);
-                    }};
-                    Day nowInsertedDay = new Day(date, bullets);
-                    viewModel.insertNewDay(nowInsertedDay);
-                }
-                return true;
             }
+
+            // Setting the adapter to the new bullets
+            // If there's already a day existing with this date, then load its content, otherwise create a new day with this date
+            if (viewModel.getDay(date) != null) {
+                currentlySelectedDay = viewModel.getDay(date);
+                System.out.println("Day already exists");
+            }
+            else {
+                currentlySelectedDay = new Day(date, new ArrayList<Bullet>());
+                viewModel.insertNewDay(currentlySelectedDay);
+                System.out.println("Day inserted");
+            }
+            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets));
+            bulletListAdapter.notifyDataSetChanged();
             return false;
         });
 
@@ -205,11 +185,13 @@ public class DayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Get the current day, then add and show a new bullet of type note to the list and save it to the database
-                Day currentDay = viewModel.getDay(date);
-                currentDay.bullets.add(new Bullet("This is a new note wow", BulletCategories.NOTE));
-                viewModel.updateDay(currentDay);
+                currentlySelectedDay.bullets.add(new Bullet("This is a new note wow", BulletCategories.NOTE));
+                viewModel.updateDay(currentlySelectedDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
+                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets));
+                bulletListAdapter.notifyDataSetChanged();
+                //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
             }
         });
         small_fab_event.setOnClickListener(new View.OnClickListener() {
