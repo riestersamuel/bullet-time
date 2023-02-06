@@ -118,7 +118,11 @@ public class DayFragment extends Fragment {
         }
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets);
+        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
+            // TODO: Methode um eine Bullet nach dem ändern zu speichern
+        }, (bullet,position) ->{
+            // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+        });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
         // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
@@ -153,7 +157,11 @@ public class DayFragment extends Fragment {
                 viewModel.insertNewDay(currentlySelectedDay);
                 System.out.println("Day inserted");
             }
-            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets));
+            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
+                // TODO: Methode um eine Bullet nach dem ändern zu speichern
+            }, (bullet,position) ->{
+                // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+            }));
             bulletListAdapter.notifyDataSetChanged();
             return false;
         });
@@ -189,7 +197,11 @@ public class DayFragment extends Fragment {
                 viewModel.updateDay(currentlySelectedDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
-                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets));
+                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
+                    // TODO: Methode um eine Bullet nach dem ändern zu speichern
+                }, (bullet,position) ->{
+                    // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+                }));
                 bulletListAdapter.notifyDataSetChanged();
                 //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
             }
