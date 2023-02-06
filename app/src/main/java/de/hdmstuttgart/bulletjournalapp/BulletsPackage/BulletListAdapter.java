@@ -1,5 +1,6 @@
 package de.hdmstuttgart.bulletjournalapp.BulletsPackage;
 
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +18,14 @@ import de.hdmstuttgart.bulletjournalapp.R;
 public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.BulletViewHolder> {
     private ArrayList<Bullet> bulletList;
 
-    iOnContentClickListener iOnContentClickListener;
-    public interface iOnContentClickListener {
-        void onContentChanged(Bullet bullet, int position);
-    }
+    TextWatcher textWatcher;
     iOnIconClickListener iOnIconClickListener;
     public interface iOnIconClickListener {
         void onBulletClicked(Bullet bullet, int position);
     }
 
-    public BulletListAdapter(ArrayList<Bullet> bulletList, iOnContentClickListener iOnContentClickListener, iOnIconClickListener iOnIconClickListener){
+    public BulletListAdapter(ArrayList<Bullet> bulletList, TextWatcher textWatcher, iOnIconClickListener iOnIconClickListener){
         this.bulletList = bulletList;
-        this.iOnContentClickListener = iOnContentClickListener;
         this.iOnIconClickListener = iOnIconClickListener;
     }
 
@@ -48,13 +45,6 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
 
         holder.bulletCategory.setOnClickListener(view -> {
             iOnIconClickListener.onBulletClicked(bullet, position);
-        });
-
-        holder.bulletText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE){
-                iOnContentClickListener.onContentChanged(bullet, position);
-            }
-            return false;
         });
 
         holder.isDone = bullet.isChecked();

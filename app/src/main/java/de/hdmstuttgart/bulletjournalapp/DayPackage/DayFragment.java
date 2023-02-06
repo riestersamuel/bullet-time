@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +106,21 @@ public class DayFragment extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
+        //TODO: TextWatcher für den EditText einrichten
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}};
+
         // Notiz zum Datenzugriff: 1. Schicht: MainViewModel, 2. DayRepository, 3. DayDAO, 4. Tatsächliche Datenbank mit Queries
         // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
 
@@ -118,9 +135,7 @@ public class DayFragment extends Fragment {
         }
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-            // TODO: Methode um eine Bullet nach dem ändern zu speichern
-        }, (bullet,position) ->{
+        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, textWatcher, (bullet,position) ->{
             // TODO: Methode um eine Bullet beim Anklicken abzuhaken
         });
         recyclerView.setAdapter(bulletListAdapter);
@@ -157,10 +172,9 @@ public class DayFragment extends Fragment {
                 viewModel.insertNewDay(currentlySelectedDay);
                 System.out.println("Day inserted");
             }
-            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-                // TODO: Methode um eine Bullet nach dem ändern zu speichern
-            }, (bullet,position) ->{
+            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, textWatcher, (bullet,position) ->{
                 // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+
             }));
             bulletListAdapter.notifyDataSetChanged();
             return false;
@@ -197,9 +211,7 @@ public class DayFragment extends Fragment {
                 viewModel.updateDay(currentlySelectedDay);
                 extended_fab_new_bullet.show();
                 hideSmallFABs();
-                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-                    // TODO: Methode um eine Bullet nach dem ändern zu speichern
-                }, (bullet,position) ->{
+                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, textWatcher,(bullet,position) -> {
                     // TODO: Methode um eine Bullet beim Anklicken abzuhaken
                 }));
                 bulletListAdapter.notifyDataSetChanged();
