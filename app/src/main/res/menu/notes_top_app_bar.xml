@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/addImageBut"
+        android:id="@+id/searchBut"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="searchBut"
         app:showAsAction="ifRoom" />
-
     <item
-        android:id="@+id/more"
-        android:title="more"
-        app:showAsAction="never" />
+        android:id="@+id/helpBut"
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        android:title="Help"
+        app:showAsAction="ifRoom"/>
 
 </menu>

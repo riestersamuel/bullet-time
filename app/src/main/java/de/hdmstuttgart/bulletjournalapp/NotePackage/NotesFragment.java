@@ -91,12 +91,28 @@ public class NotesFragment extends Fragment {
 
 
 		toolbar.setOnMenuItemClickListener(item -> {
-			if (item.getItemId() == R.id.addImageBut) {
+			if (item.getItemId() == R.id.searchBut) {
 				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
 				searchView.setVisibility(View.VISIBLE);
 				searchView.callOnClick();
 				searchView.requestFocus();
 				return true;
+			}
+			return false;
+		});
+
+		toolbar.setOnMenuItemClickListener(item -> {
+			if(item.getItemId() == R.id.helpBut) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setTitle(R.string.information_title);
+				builder.setMessage(R.string.information_text);
+				builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				builder.show();
 			}
 			return false;
 		});
