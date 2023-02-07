@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.BulletCategories;
@@ -44,6 +45,7 @@ public class DayFragment extends Fragment {
     private Calendar todayCalendar = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
     private MaterialToolbar topBarTitle;
+    private BulletListAdapter bulletListAdapter;
     String date;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -117,13 +119,16 @@ public class DayFragment extends Fragment {
             currentlySelectedDay = new Day(date, new ArrayList<Bullet>());
             viewModel.insertNewDay(currentlySelectedDay);
         }
-        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
+        RecyclerView recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
+        // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+        bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
             // TODO: Methode um geänderten Content zu speichern
         }, (bullet,position) ->{
             // TODO: Methode um eine Bullet beim Anklicken abzuhaken
-            changeBulletStatus(bullet, position);
+            bullet.setChecked(!bullet.isChecked());
+            viewModel.updateDay(currentlySelectedDay);
+            bulletListAdapter.notifyItemChanged(position);
         });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
@@ -160,13 +165,7 @@ public class DayFragment extends Fragment {
                 System.out.println("Day inserted");
             }
 
-            recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-                // TODO: Methode um eine Bullet nach dem ändern zu speichern
-            }, (bullet,position) ->{
-                // TODO: Methode um eine Bullet beim Anklicken abzuhaken
-                changeBulletStatus(bullet, position);
-            }));
-            bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
+            bulletListAdapter.setBulletList(currentlySelectedDay.bullets);
             bulletListAdapter.notifyDataSetChanged();
             return false;
         });
@@ -228,34 +227,7 @@ public class DayFragment extends Fragment {
         });
     }
 
-    private void changeBulletStatus(Bullet bullet, int position) {
-        ImageButton imageButton = getView().findViewById(R.id.imageButton);
-        // Flip through the maximal of two status icons
-        bullet.setChecked(!bullet.isChecked());
-        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
-            imageButton.setImageResource(R.drawable.baseline_event_checked_24);
-        }
-        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
-            imageButton.setImageResource(R.drawable.baseline_event_unchecked_24);
-        }
-        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
-            imageButton.setImageResource(R.drawable.baseline_check_box_24);
-        }
-        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
-            imageButton.setImageResource(R.drawable.baseline_check_box_outline_blank_24);
-        }
-        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
-            imageButton.setImageResource(R.drawable.baseline_star_24);
-        }
-        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
-            imageButton.setImageResource(R.drawable.baseline_star_outline_24);
-        }
-        else System.out.println("Error: No category found");
-        // Save the changes to the database
-        viewModel.updateDay(currentlySelectedDay);
-        System.out.println("Bullet status changed");
-        System.out.println(currentlySelectedDay);
-    }
+
 
     FloatingActionButton small_fab_note;
     FloatingActionButton small_fab_event;

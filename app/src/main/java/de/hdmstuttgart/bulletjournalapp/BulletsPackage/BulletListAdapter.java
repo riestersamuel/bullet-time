@@ -15,6 +15,14 @@ import java.util.ArrayList;
 import de.hdmstuttgart.bulletjournalapp.R;
 
 public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.BulletViewHolder> {
+    public ArrayList<Bullet> getBulletList() {
+        return bulletList;
+    }
+
+    public void setBulletList(ArrayList<Bullet> bulletList) {
+        this.bulletList = bulletList;
+    }
+
     private ArrayList<Bullet> bulletList;
 
     iOnContentClickListener iOnContentClickListener;
@@ -58,10 +66,25 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
             return false;
         });
 
+
         holder.isDone = bullet.isChecked();
-        holder.bulletCategory.setImageResource(bullet.getCategory().getImage());
+        setIcon(holder, bullet);
     }
 
+    private void setIcon(BulletViewHolder holder, Bullet bullet){
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_check_box_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_check_box_outline_blank_24);
+        }
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_star_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_star_outline_24);
+        }
+    }
     @Override
     public int getItemCount() {
         if (bulletList == null) return 0;

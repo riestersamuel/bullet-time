@@ -13,7 +13,7 @@ public class Bullet {
 	private int id;
 	private BulletCategories category;
 
-	private boolean isChecked;
+	private boolean isChecked = false;
 
 	public Bullet(String content, BulletCategories category) {
 		this.content = content;
