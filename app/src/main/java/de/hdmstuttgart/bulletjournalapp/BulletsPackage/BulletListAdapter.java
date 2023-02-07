@@ -26,9 +26,11 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
     private ArrayList<Bullet> bulletList;
 
     iOnContentClickListener iOnContentClickListener;
+
     public interface iOnContentClickListener {
         void onContentChanged(Bullet bullet, int position);
     }
+
     iOnIconClickListener iOnIconClickListener;
     public interface iOnIconClickListener {
         void onBulletClicked(Bullet bullet, int position);
@@ -51,6 +53,7 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
     public void onBindViewHolder(@NonNull BulletListAdapter.BulletViewHolder holder, int position) {
         Bullet bullet = bulletList.get(position);
         holder.bulletText.setText(bullet.getContent());
+        EditText editText = holder.itemView.findViewById(R.id.editText);
 
         // If the bullet category is X -> Change image
 

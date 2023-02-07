@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingVertical="8dp"
     android:paddingHorizontal="16dp"
-    android:background="#eae7d9">
+    android:background="#F2E1BB">
 
     <EditText
         android:id="@+id/ET_Title"

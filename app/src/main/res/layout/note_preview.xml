@@ -6,17 +6,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border"
     android:maxWidth="256dp"
+    android:layout_margin="4dp"
     android:paddingHorizontal="16dp"
     android:paddingVertical="8dp">
-
-    <TextView
-        android:id="@+id/TV_Date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Date"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="8dp" />
 
     <TextView
         android:id="@+id/titleNotePre"
@@ -24,21 +16,37 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TV_Date" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/TV_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#4C4639"
+        android:text="Date"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleNotePre" />
 
     <TextView
         android:id="@+id/contentTextNotePre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#1E1B16"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:maxLines="3"
         android:text="This is a Preview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleNotePre"
+        app:layout_constraintTop_toBottomOf="@id/TV_Date"
         android:ellipsize="end"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

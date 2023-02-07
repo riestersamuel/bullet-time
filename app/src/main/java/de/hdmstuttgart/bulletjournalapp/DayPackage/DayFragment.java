@@ -1,6 +1,9 @@
 package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -216,7 +222,21 @@ public class DayFragment extends Fragment {
             public void onClick(View v) {
                 //TODO: Add a new daily highlight
                 // Get the current day, then add and show a new bullet of type note to the list and save it to the database
-                currentlySelectedDay.bullets.add(new Bullet("Diese App fertig programmieren", BulletCategories.DAILY_HIGHLIGHT));
+                currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.DAILY_HIGHLIGHT));
+
+                bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
+                bulletListAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(currentlySelectedDay.bullets.size() - 1);
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(0);
+                //TODO: Fix this, it shouldnt be null
+                if (viewHolder == null){
+                    System.out.println("Viewholder is null");
+                    return;
+                }
+                EditText editText = viewHolder.itemView.findViewById(R.id.editText);
+                editText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
                 viewModel.updateDay(currentlySelectedDay);
                 bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
                 //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
@@ -226,7 +246,6 @@ public class DayFragment extends Fragment {
             }
         });
     }
-
 
 
     FloatingActionButton small_fab_note;

@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/today"
-        android:icon="@drawable/baseline_mode_standby_24"
+        android:icon="@drawable/baseline_today_24"
         android:title="datePicker"
         app:showAsAction="ifRoom" />
 
