@@ -48,6 +48,7 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
 
         holder.bulletCategory.setOnClickListener(view -> {
             iOnIconClickListener.onBulletClicked(bullet, position);
+            System.out.println("------------------------------------HIER bulletlistadapter.java holder.bulletCategory.setOnClickListener------------------------------------");
         });
 
         holder.bulletText.setOnEditorActionListener((textView, actionId, keyEvent) -> {

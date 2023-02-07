@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -119,9 +120,10 @@ public class DayFragment extends Fragment {
         RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         BulletListAdapter bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-            // TODO: Methode um eine Bullet nach dem ändern zu speichern
+            // TODO: Methode um geänderten Content zu speichern
         }, (bullet,position) ->{
             // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+            changeBulletStatus(bullet, position);
         });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
@@ -157,11 +159,14 @@ public class DayFragment extends Fragment {
                 viewModel.insertNewDay(currentlySelectedDay);
                 System.out.println("Day inserted");
             }
+
             recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
                 // TODO: Methode um eine Bullet nach dem ändern zu speichern
             }, (bullet,position) ->{
                 // TODO: Methode um eine Bullet beim Anklicken abzuhaken
+                changeBulletStatus(bullet, position);
             }));
+            bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
             bulletListAdapter.notifyDataSetChanged();
             return false;
         });
@@ -192,50 +197,64 @@ public class DayFragment extends Fragment {
         small_fab_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the current day, then add and show a new bullet of type note to the list and save it to the database
-                currentlySelectedDay.bullets.add(new Bullet("This is a new note wow", BulletCategories.NOTE));
-                viewModel.updateDay(currentlySelectedDay);
-                extended_fab_new_bullet.show();
-                hideSmallFABs();
-                recyclerView.setAdapter(new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-                    // TODO: Methode um eine Bullet nach dem ändern zu speichern
-                }, (bullet,position) ->{
-                    // TODO: Methode um eine Bullet beim Anklicken abzuhaken
-                }));
-                bulletListAdapter.notifyDataSetChanged();
-                //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
+                // TODO: Add a new note
             }
         });
         small_fab_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Day currentDay = viewModel.getDay(date);
-                currentDay.bullets.add(new Bullet("This is a new event", BulletCategories.EVENT));
-                viewModel.updateDay(currentDay);
-                extended_fab_new_bullet.show();
-                hideSmallFABs();
+                // TODO: Add a new event
             }
         });
         small_fab_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Day currentDay = viewModel.getDay(date);
-                currentDay.bullets.add(new Bullet("This is a new task", BulletCategories.TASK));
-                viewModel.updateDay(currentDay);
-                extended_fab_new_bullet.show();
-                hideSmallFABs();
+                //TODO: Add a new task
             }
         });
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Day currentDay = viewModel.getDay(date);
-                currentDay.bullets.add(new Bullet("This is a new daily highlight", BulletCategories.DAILY_HIGHLIGHT));
-                viewModel.updateDay(currentDay);
-                extended_fab_new_bullet.show();
+                //TODO: Add a new daily highlight
+                // Get the current day, then add and show a new bullet of type note to the list and save it to the database
+                currentlySelectedDay.bullets.add(new Bullet("Diese App fertig programmieren", BulletCategories.DAILY_HIGHLIGHT));
+                viewModel.updateDay(currentlySelectedDay);
+                bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
+                //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
+                bulletListAdapter.notifyDataSetChanged();
                 hideSmallFABs();
+                extended_fab_new_bullet.show();
             }
         });
+    }
+
+    private void changeBulletStatus(Bullet bullet, int position) {
+        ImageButton imageButton = getView().findViewById(R.id.imageButton);
+        // Flip through the maximal of two status icons
+        bullet.setChecked(!bullet.isChecked());
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            imageButton.setImageResource(R.drawable.baseline_event_checked_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            imageButton.setImageResource(R.drawable.baseline_event_unchecked_24);
+        }
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
+            imageButton.setImageResource(R.drawable.baseline_check_box_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
+            imageButton.setImageResource(R.drawable.baseline_check_box_outline_blank_24);
+        }
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            imageButton.setImageResource(R.drawable.baseline_star_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
+            imageButton.setImageResource(R.drawable.baseline_star_outline_24);
+        }
+        else System.out.println("Error: No category found");
+        // Save the changes to the database
+        viewModel.updateDay(currentlySelectedDay);
+        System.out.println("Bullet status changed");
+        System.out.println(currentlySelectedDay);
     }
 
     FloatingActionButton small_fab_note;

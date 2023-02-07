@@ -9,6 +9,7 @@ import de.hdmstuttgart.bulletjournalapp.DayPackage.Converters;
 public class Bullet {
 
 	private String content;
+
 	private int id;
 	private BulletCategories category;
 
