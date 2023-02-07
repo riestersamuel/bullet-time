@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
     android:padding="8dp">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageButton
@@ -28,17 +30,18 @@
                 android:paddingRight="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_star_12" />
+                app:srcCompat="@drawable/baseline_star_24" />
 
             <EditText
                 android:id="@+id/editText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:gravity="center"
-                android:text="Das hier ist ein Eintrag im Bullet Journal."
+                android:inputType="textMultiLine"
+                android:paddingTop="2dp"
+                android:text="Das hier ist ein Eintrag im Bullet Journal. Das hier ist ein Eintrag im Bullet Journal. Das hier ist ein Eintrag im Bullet Journal."
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                app:layout_constraintBottom_toBottomOf="@id/imageButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageButton"
                 app:layout_constraintTop_toTopOf="@+id/imageButton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
