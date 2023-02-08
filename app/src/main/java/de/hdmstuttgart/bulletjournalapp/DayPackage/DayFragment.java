@@ -150,8 +150,9 @@ public class DayFragment extends Fragment {
             builder.setNegativeButton("No", null);
             builder.show();
 
-        },new TextWatcher() {
 
+        },new TextWatcher() {
+            // Saving the content of the bullet when the user leaves the bullet
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,8 +176,8 @@ public class DayFragment extends Fragment {
         });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
-        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
 
+        // Changing the date when the user clicks on the icons in the top bar
         toolbar.setOnMenuItemClickListener(item -> {
             // Next day >
             if (item.getItemId() == R.id.next_day) {
@@ -324,6 +325,7 @@ public class DayFragment extends Fragment {
             }
             EditText editText = viewHolder.itemView.findViewById(R.id.editText);
             editText.requestFocus();
+            // Automatically show the keyboard for the users convenience
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
         });

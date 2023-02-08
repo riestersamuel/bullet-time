@@ -131,7 +131,7 @@ public class NewNoteFragment extends Fragment {
 		}
 
 
-
+		// Adding the back button to the toolbar
 		toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
@@ -144,6 +144,7 @@ public class NewNoteFragment extends Fragment {
 			}
 		});
 
+		// Adding images to the note
 		toolbar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {

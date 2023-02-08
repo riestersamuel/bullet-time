@@ -21,10 +21,12 @@ public class TimerService extends Service {
 		return null;
 	}
 
+	// This method is called when the service is started
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		this.timer = TimerHolder.getInstance().getTimer();
 		timer.start();
+		// Create notification
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
 				.setSmallIcon(R.drawable.ic_baseline_timer_24)
 				.setContentTitle("Timer is running")
@@ -34,6 +36,7 @@ public class TimerService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+	// This method is called when the service is stopped
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

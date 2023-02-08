@@ -27,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Create Notification Channel for Timer Service
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			NotificationChannel channel = new NotificationChannel("channel_id", "Timer Service", NotificationManager.IMPORTANCE_HIGH);
 			NotificationManager notificationManager = getSystemService(NotificationManager.class);
 			notificationManager.createNotificationChannel(channel);
 		}
 
+		// Hide BottomNavigationView when keyboard is opened
 		View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 		rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@SuppressLint("RestrictedApi")
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-
+		// Set content view and set first fragment
 		setContentView(R.layout.activity_main);
 		BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dayFragment).commit();

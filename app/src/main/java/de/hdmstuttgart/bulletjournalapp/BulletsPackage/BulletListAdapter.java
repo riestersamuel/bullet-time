@@ -21,27 +21,21 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
     public ArrayList<Bullet> getBulletList() {
         return bulletList;
     }
-
     public void setBulletList(ArrayList<Bullet> bulletList) {
         this.bulletList = bulletList;
     }
-
     private ArrayList<Bullet> bulletList;
-
+    private TextWatcher textWatcher;
     iOnContentClickListener iOnContentClickListener;
+    iOnIconClickListener iOnIconClickListener;
+    iOnBulletLongClickListener iOnBulletLongClickListener;
 
     public interface iOnContentClickListener {
         void onContentChanged(Bullet bullet, int position);
     }
-
-    private TextWatcher textWatcher;
-
-    iOnIconClickListener iOnIconClickListener;
     public interface iOnIconClickListener {
         void onBulletClicked(Bullet bullet, int position);
     }
-
-    iOnBulletLongClickListener iOnBulletLongClickListener;
     public interface iOnBulletLongClickListener {
         void onBulletLongClicked(Bullet bullet, int position);
     }
@@ -61,18 +55,14 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         return new BulletViewHolder(view);
     }
 
+    // TODO: Comment this @Maik
     @Override
     public void onBindViewHolder(@NonNull BulletListAdapter.BulletViewHolder holder, int position) {
         Bullet bullet = bulletList.get(position);
         holder.bulletText.setText(bullet.getContent());
-        EditText editText = holder.itemView.findViewById(R.id.editText);
-
-
-        // If the bullet category is X -> Change image
 
         holder.bulletCategory.setOnClickListener(view -> {
             iOnIconClickListener.onBulletClicked(bullet, position);
-            System.out.println("------------------------------------HIER bulletlistadapter.java holder.bulletCategory.setOnClickListener------------------------------------");
         });
 
         holder.bulletText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
@@ -81,7 +71,6 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
             }
             return false;
         });
-
 
         holder.isDone = bullet.isChecked();
         setIcon(holder, bullet);
@@ -98,6 +87,7 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
     }
 
 
+    // Changing the icons depending on the bullet's category and status
     private void setIcon(BulletViewHolder holder, Bullet bullet){
         if (bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {
             holder.bulletCategory.setImageResource(R.drawable.baseline_check_box_24);

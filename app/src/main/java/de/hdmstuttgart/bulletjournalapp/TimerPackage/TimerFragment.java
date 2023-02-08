@@ -46,12 +46,10 @@ public class TimerFragment extends Fragment {
 	private boolean isTimerRunning;
 	private long remainingTime;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -68,7 +66,6 @@ public class TimerFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
 
-    // TODO: Rename and change types and number of parameters
     public static TimerFragment newInstance(String param1, String param2) {
         TimerFragment fragment = new TimerFragment();
         Bundle args = new Bundle();
@@ -115,7 +112,7 @@ public class TimerFragment extends Fragment {
 		ProgressBar progressBar = getView().findViewById(R.id.progressBarTimer);
 		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
 
-
+		// If the timer is running, show the stop button and hide the start button
 		if(TimerHolder.getInstance().getTimer() != null) {
 			information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
 			extended_fab_start.hide();
@@ -139,7 +136,6 @@ public class TimerFragment extends Fragment {
 			startAnimation(view);
 		}
 
-
         shortBreakTimer = new CountDownTimer(300000, 1000) {
 			final double onePercent = (double)100/300000;
             @Override
@@ -156,7 +152,6 @@ public class TimerFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                // Rufe die Funktion auf, die den Timer startet (also die Funktion, die der extended_fab_start onClickListener aufruft)
 				requireContext().stopService(shortBreakServiceIntent);
 				timerServiceIntent = new Intent(getActivity(), TimerService.class);
 				TimerHolder.getInstance().setTimer(timer);

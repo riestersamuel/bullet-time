@@ -89,7 +89,7 @@ public class NotesFragment extends Fragment {
 
 		MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
 
-
+		// Creating the popup menu for help
 		toolbar.setOnMenuItemClickListener(item -> {
 			if(item.getItemId() == R.id.helpBut) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -103,6 +103,7 @@ public class NotesFragment extends Fragment {
 				});
 				builder.show();
 			}
+			// The search button
 			else if (item.getItemId() == R.id.searchBut) {
 				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
 				if (searchView.getVisibility() == View.VISIBLE) {
