@@ -91,17 +91,6 @@ public class NotesFragment extends Fragment {
 
 
 		toolbar.setOnMenuItemClickListener(item -> {
-			if (item.getItemId() == R.id.searchBut) {
-				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
-				searchView.setVisibility(View.VISIBLE);
-				searchView.callOnClick();
-				searchView.requestFocus();
-				return true;
-			}
-			return false;
-		});
-
-		toolbar.setOnMenuItemClickListener(item -> {
 			if(item.getItemId() == R.id.helpBut) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 				builder.setTitle(R.string.information_title);
@@ -113,6 +102,13 @@ public class NotesFragment extends Fragment {
 					}
 				});
 				builder.show();
+			}
+			else if (item.getItemId() == R.id.searchBut) {
+				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
+				searchView.setVisibility(View.VISIBLE);
+				searchView.callOnClick();
+				searchView.requestFocus();
+				return true;
 			}
 			return false;
 		});
