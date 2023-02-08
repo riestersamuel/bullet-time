@@ -220,27 +220,23 @@ public class DayFragment extends Fragment {
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Add a new daily highlight
-                // Get the current day, then add and show a new bullet of type note to the list and save it to the database
                 currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.DAILY_HIGHLIGHT));
 
                 bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
                 bulletListAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(currentlySelectedDay.bullets.size() - 1);
-                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(0);
-                //TODO: Fix this, it shouldnt be null
-                if (viewHolder == null){
-                    System.out.println("Viewholder is null");
-                    return;
-                }
-                EditText editText = viewHolder.itemView.findViewById(R.id.editText);
-                editText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                recyclerView.post(() -> {
+                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(currentlySelectedDay.bullets.size() - 1);
+                    if (viewHolder == null){
+                        System.out.println("Viewholder is null");
+                        return;
+                    }
+                    EditText editText = viewHolder.itemView.findViewById(R.id.editText);
+                    editText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                });
                 viewModel.updateDay(currentlySelectedDay);
-                bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
-                //bulletListAdapter.notifyItemRangeChanged(0, currentlySelectedDay.bullets.size());
-                bulletListAdapter.notifyDataSetChanged();
                 hideSmallFABs();
                 extended_fab_new_bullet.show();
             }
