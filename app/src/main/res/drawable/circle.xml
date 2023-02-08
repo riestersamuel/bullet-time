@@ -8,7 +8,7 @@
     <item>
         <rotate android:toDegrees="270" android:fromDegrees="270">
             <shape android:shape="ring" android:thicknessRatio="16" android:useLevel="true">
-                <solid android:color="#6464FF" />
+                <solid android:color="#745B00" />
             </shape>
         </rotate>
 

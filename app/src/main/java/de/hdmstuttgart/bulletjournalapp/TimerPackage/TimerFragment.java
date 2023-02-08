@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
@@ -105,19 +106,18 @@ public class TimerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
         // Defining the UI elements
         ExtendedFloatingActionButton extended_fab_start = getView().findViewById(R.id.extended_fab_start);
         ExtendedFloatingActionButton extended_fab_stop = getView().findViewById(R.id.extended_fab_stop);
         TextView information_text = getView().findViewById(R.id.information_text);
+		ConstraintLayout container = getView().findViewById(R.id.container);
 		TextView remaining_time = getView().findViewById(R.id.remaining_time);
 		ProgressBar progressBar = getView().findViewById(R.id.progressBarTimer);
 		information_text.setText("Currently no timer is running. Start a new timer or find out how this works by clicking on the question mark in the top right.");
 
 
 		if(TimerHolder.getInstance().getTimer() != null) {
-			information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
+			information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
 			extended_fab_start.hide();
 			extended_fab_stop.show();
 
@@ -135,6 +135,7 @@ public class TimerFragment extends Fragment {
 			ImageView tomato = view.findViewById(R.id.tomatoImage);
 			tomato.setVisibility(View.GONE);
 			progressBar.setVisibility(View.VISIBLE);
+			container.setVisibility(View.VISIBLE);
 			startAnimation(view);
 		}
 
@@ -150,7 +151,7 @@ public class TimerFragment extends Fragment {
 				animation.setInterpolator(new DecelerateInterpolator());
 				animation.start();
                 remaining_time.setText("" + remainingTime);
-                information_text.setText("minutes of your short break remain. \nEnjoy the break!");
+                information_text.setText("minute(s) of your short break remain. \nEnjoy the break!");
             }
 
             @Override
@@ -174,7 +175,7 @@ public class TimerFragment extends Fragment {
 				animation.setInterpolator(new DecelerateInterpolator());
 				animation.start();
                 remaining_time.setText("" + remainingTime);
-                information_text.setText("minutes of your long break remain. Enjoy the break!");
+                information_text.setText("minute(s) of your long break remain. Enjoy the break!");
             }
 
             @Override
@@ -199,7 +200,7 @@ public class TimerFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 remainingTime = (int) (millisUntilFinished / 60000 + 1);
-				remaining_time.setText("" + remainingTime+" min");
+				remaining_time.setText("" + remainingTime);
 				int progress = (int)(onePercent * millisUntilFinished);
 				ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress",progress);
 				animation.setDuration(1000); // 0.5 second
@@ -239,9 +240,10 @@ public class TimerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 remaining_time.setText("25");
-                information_text.setText("minutes of your pomodoro session remain. \nFocus on your most important task!");
+                information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
                 extended_fab_start.hide();
                 extended_fab_stop.show();
+				container.setVisibility(View.VISIBLE);
 				if(timerServiceIntent == null){
 					timerServiceIntent = new Intent(getActivity(), TimerService.class);
 					TimerHolder.getInstance().setTimer(timer);
@@ -289,7 +291,7 @@ public class TimerFragment extends Fragment {
                 stopAnimation();
                 // Hide tomato image
                 ImageView tomato = view.findViewById(R.id.tomatoImage);
-                tomato.setVisibility(View.VISIBLE);
+                tomato.setVisibility(View.GONE);
             }
         });
 
@@ -318,8 +320,10 @@ public class TimerFragment extends Fragment {
     private void stopAnimation() {
         // That's for the timer animation
         View view = super.getView();
+		ConstraintLayout container = getView().findViewById(R.id.container);
         ImageView clockAnimation = view.findViewById(R.id.clock_animation);
-        clockAnimation.setVisibility(View.INVISIBLE);
+        clockAnimation.setVisibility(View.GONE);
+		container.setVisibility(View.GONE);
         ((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
     }
 
