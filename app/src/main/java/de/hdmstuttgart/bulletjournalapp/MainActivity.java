@@ -1,11 +1,16 @@
 package de.hdmstuttgart.bulletjournalapp;
 
+import static com.google.android.material.internal.ViewUtils.dpToPx;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,11 +27,35 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Create Notification Channel for Timer Service
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			NotificationChannel channel = new NotificationChannel("channel_id", "Timer Service", NotificationManager.IMPORTANCE_HIGH);
 			NotificationManager notificationManager = getSystemService(NotificationManager.class);
 			notificationManager.createNotificationChannel(channel);
 		}
+
+		// Hide BottomNavigationView when keyboard is opened
+		View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+		rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@SuppressLint("RestrictedApi")
+			@Override
+			public void onGlobalLayout() {
+				int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
+				if (heightDiff > dpToPx(getApplicationContext(), 200)) {
+					// Keyboard is opened
+					System.out.println("Keyboard is opened");
+					BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+					bottomNavigationView.setVisibility(View.GONE);
+				} else {
+					// Keyboard is closed
+					System.out.println("Keyboard is closed");
+					BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+					bottomNavigationView.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+
+		// Set content view and set first fragment
 		setContentView(R.layout.activity_main);
 		BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dayFragment).commit();

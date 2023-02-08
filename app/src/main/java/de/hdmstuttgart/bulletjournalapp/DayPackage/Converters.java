@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 
 public class Converters {
+    // We need to use converts to save our bullets successfully in the database
 
     // For reading from the database
     @TypeConverter

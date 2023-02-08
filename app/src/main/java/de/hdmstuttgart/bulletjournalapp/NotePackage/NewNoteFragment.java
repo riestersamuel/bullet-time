@@ -45,12 +45,10 @@ import de.hdmstuttgart.bulletjournalapp.R;
  */
 public class NewNoteFragment extends Fragment {
 
-	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
 
-	// TODO: Rename and change types of parameters
 	private String mParam1;
 	private String mParam2;
 	private Note note;
@@ -72,7 +70,7 @@ public class NewNoteFragment extends Fragment {
 	 * @param param2 Parameter 2.
 	 * @return A new instance of fragment NewNoteFragment.
 	 */
-	// TODO: Rename and change types and number of parameters
+
 	public static NewNoteFragment newInstance(String param1, String param2, Note note) {
 		NewNoteFragment fragment = new NewNoteFragment();
 		Bundle args = new Bundle();
@@ -131,7 +129,7 @@ public class NewNoteFragment extends Fragment {
 		}
 
 
-
+		// Adding the back button to the toolbar
 		toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
@@ -144,6 +142,7 @@ public class NewNoteFragment extends Fragment {
 			}
 		});
 
+		// Adding images to the note
 		toolbar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {

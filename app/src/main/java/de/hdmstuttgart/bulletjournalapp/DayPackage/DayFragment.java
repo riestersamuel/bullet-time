@@ -52,12 +52,10 @@ public class DayFragment extends Fragment {
     private BulletListAdapter bulletListAdapter;
     String date;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -74,7 +72,6 @@ public class DayFragment extends Fragment {
      * @return A new instance of fragment DayFragment.
      */
 
-    // TODO: Rename and change types and number of parameters
     public static DayFragment newInstance(String param1, String param2) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
@@ -126,12 +123,10 @@ public class DayFragment extends Fragment {
             viewModel.insertNewDay(currentlySelectedDay);
         }
         recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
+        //TODO: Hier paar Kommentare einfügen @Maik
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        // TODO: Methode um eine Bullet beim Anklicken abzuhaken
         bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-            // TODO: Methode um geänderten Content zu speichern
         }, (bullet,position) ->{
-            // TODO: Methode um eine Bullet beim Anklicken abzuhaken
             bullet.setChecked(!bullet.isChecked());
             viewModel.updateDay(currentlySelectedDay);
             bulletListAdapter.notifyItemChanged(position);
@@ -150,8 +145,9 @@ public class DayFragment extends Fragment {
             builder.setNegativeButton("No", null);
             builder.show();
 
-        },new TextWatcher() {
 
+        },new TextWatcher() {
+            // Saving the content of the bullet when the user leaves the bullet
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,8 +171,8 @@ public class DayFragment extends Fragment {
         });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);
-        // Nicht vergessen: notifyDataSetChanged() aufrufen, wenn die Liste geändert wurde
 
+        // Changing the date when the user clicks on the icons in the top bar
         toolbar.setOnMenuItemClickListener(item -> {
             // Next day >
             if (item.getItemId() == R.id.next_day) {
@@ -324,12 +320,11 @@ public class DayFragment extends Fragment {
             }
             EditText editText = viewHolder.itemView.findViewById(R.id.editText);
             editText.requestFocus();
+            // Automatically show the keyboard for the users convenience
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
         });
         viewModel.updateDay(currentlySelectedDay);
-        hideSmallFABs();
-         extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
-        extended_fab_new_bullet.show();
+        extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
     }
 }

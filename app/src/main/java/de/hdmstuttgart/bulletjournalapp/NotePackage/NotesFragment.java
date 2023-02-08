@@ -53,7 +53,7 @@ public class NotesFragment extends Fragment {
 	 * @param param1 Parameter 1.
 	 * @return A new instance of fragment NotesFragment.
 	 */
-	// TODO: Rename and change types and number of parameters
+
 	public static NotesFragment newInstance(String param1) {
 		NotesFragment fragment = new NotesFragment();
 		Bundle args = new Bundle();
@@ -89,7 +89,7 @@ public class NotesFragment extends Fragment {
 
 		MaterialToolbar toolbar = (MaterialToolbar) view.findViewById(R.id.topAppBar);
 
-
+		// Creating the popup menu for help
 		toolbar.setOnMenuItemClickListener(item -> {
 			if(item.getItemId() == R.id.helpBut) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -103,6 +103,7 @@ public class NotesFragment extends Fragment {
 				});
 				builder.show();
 			}
+			// The search button
 			else if (item.getItemId() == R.id.searchBut) {
 				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
 				if (searchView.getVisibility() == View.VISIBLE) {
