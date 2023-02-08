@@ -55,7 +55,12 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         return new BulletViewHolder(view);
     }
 
-    // TODO: Comment this @Maik
+    /**
+     *  Called by RecyclerView to display the data at the specified position
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull BulletListAdapter.BulletViewHolder holder, int position) {
         Bullet bullet = bulletList.get(position);

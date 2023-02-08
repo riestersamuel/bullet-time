@@ -123,14 +123,17 @@ public class DayFragment extends Fragment {
             viewModel.insertNewDay(currentlySelectedDay);
         }
         recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
-        //TODO: Hier paar Kommentare einfügen @Maik
+
+        //set up the RecyclerView with the adapter and the layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
         }, (bullet,position) ->{
+            // When the user clicks on the bullet, the bullet is marked as done
             bullet.setChecked(!bullet.isChecked());
             viewModel.updateDay(currentlySelectedDay);
             bulletListAdapter.notifyItemChanged(position);
         }, (bullet,position) -> {
+            // When the user long clicks on the bullet, the bullet is deleted
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Delete Bullet");
             builder.setMessage("Are you sure you want to delete this bullet?");
