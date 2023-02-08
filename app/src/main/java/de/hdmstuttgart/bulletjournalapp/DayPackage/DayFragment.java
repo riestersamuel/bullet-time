@@ -328,8 +328,6 @@ public class DayFragment extends Fragment {
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
         });
         viewModel.updateDay(currentlySelectedDay);
-        hideSmallFABs();
-         extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
-        extended_fab_new_bullet.show();
+        extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
     }
 }

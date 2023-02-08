@@ -28,7 +28,7 @@ public class TimerService extends Service {
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
 				.setSmallIcon(R.drawable.ic_baseline_timer_24)
 				.setContentTitle("Timer is running")
-				.setContentText("The timer is still running even if you close the app")
+				.setContentText("The timer is still running even if you close the app.")
 				.setPriority(NotificationCompat.PRIORITY_HIGH);
 		startForeground(1, builder.build());
 		return super.onStartCommand(intent, flags, startId);
