@@ -105,6 +105,8 @@ public class DayFragment extends Fragment {
         return view;
     }
 
+    RecyclerView recyclerView;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -127,7 +129,7 @@ public class DayFragment extends Fragment {
             currentlySelectedDay = new Day(date, new ArrayList<Bullet>());
             viewModel.insertNewDay(currentlySelectedDay);
         }
-        RecyclerView recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
+        recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         // TODO: Methode um eine Bullet beim Anklicken abzuhaken
         bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
@@ -226,43 +228,29 @@ public class DayFragment extends Fragment {
         small_fab_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add a new note
+                currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.NOTE));
+                afterNewBulletAdded();
             }
         });
         small_fab_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add a new event
+                currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.EVENT));
+                afterNewBulletAdded();
             }
         });
         small_fab_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Add a new task
+                currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.TASK));
+                afterNewBulletAdded();
             }
         });
         small_fab_daily_highlight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentlySelectedDay.bullets.add(new Bullet("", BulletCategories.DAILY_HIGHLIGHT));
-
-                bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
-                bulletListAdapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(currentlySelectedDay.bullets.size() - 1);
-                recyclerView.post(() -> {
-                    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(currentlySelectedDay.bullets.size() - 1);
-                    if (viewHolder == null){
-                        System.out.println("Viewholder is null");
-                        return;
-                    }
-                    EditText editText = viewHolder.itemView.findViewById(R.id.editText);
-                    editText.requestFocus();
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-                });
-                viewModel.updateDay(currentlySelectedDay);
-                hideSmallFABs();
-                extended_fab_new_bullet.show();
+                afterNewBulletAdded();
             }
         });
     }
@@ -272,6 +260,7 @@ public class DayFragment extends Fragment {
     FloatingActionButton small_fab_event;
     FloatingActionButton small_fab_task;
     FloatingActionButton small_fab_daily_highlight;
+    ExtendedFloatingActionButton extended_fab_new_bullet;
 
     // Method to hide the small FABs
     public void hideSmallFABs() {
@@ -311,5 +300,25 @@ public class DayFragment extends Fragment {
         } else {
             topBarTitle.setTitle(date);
         }
-        }
     }
+    public void afterNewBulletAdded() {
+        bulletListAdapter.notifyItemInserted(currentlySelectedDay.bullets.size() - 1);
+        bulletListAdapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(currentlySelectedDay.bullets.size() - 1);
+        recyclerView.post(() -> {
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(currentlySelectedDay.bullets.size() - 1);
+            if (viewHolder == null){
+                System.out.println("Viewholder is null");
+                return;
+            }
+            EditText editText = viewHolder.itemView.findViewById(R.id.editText);
+            editText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        });
+        viewModel.updateDay(currentlySelectedDay);
+        hideSmallFABs();
+         extended_fab_new_bullet = getView().findViewById(R.id.extended_fab_new_bullet);
+        extended_fab_new_bullet.show();
+    }
+}

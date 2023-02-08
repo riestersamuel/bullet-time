@@ -94,6 +94,15 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.DAILY_HIGHLIGHT) {
             holder.bulletCategory.setImageResource(R.drawable.baseline_star_outline_24);
         }
+        if (bullet.isChecked() && bullet.getCategory() == BulletCategories.EVENT) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_event_checked_24);
+        }
+        if (!bullet.isChecked() && bullet.getCategory() == BulletCategories.EVENT) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_event_unchecked_24);
+        }
+        if (bullet.getCategory() == BulletCategories.NOTE) {
+            holder.bulletCategory.setImageResource(R.drawable.baseline_remove_24);
+        }
     }
     @Override
     public int getItemCount() {
