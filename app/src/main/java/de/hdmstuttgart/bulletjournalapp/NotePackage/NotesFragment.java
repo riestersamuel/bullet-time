@@ -53,7 +53,7 @@ public class NotesFragment extends Fragment {
 	 * @param param1 Parameter 1.
 	 * @return A new instance of fragment NotesFragment.
 	 */
-	// TODO: Rename and change types and number of parameters
+
 	public static NotesFragment newInstance(String param1) {
 		NotesFragment fragment = new NotesFragment();
 		Bundle args = new Bundle();

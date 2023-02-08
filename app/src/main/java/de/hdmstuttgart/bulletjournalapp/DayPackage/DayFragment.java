@@ -52,12 +52,10 @@ public class DayFragment extends Fragment {
     private BulletListAdapter bulletListAdapter;
     String date;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -74,7 +72,6 @@ public class DayFragment extends Fragment {
      * @return A new instance of fragment DayFragment.
      */
 
-    // TODO: Rename and change types and number of parameters
     public static DayFragment newInstance(String param1, String param2) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
@@ -126,12 +123,10 @@ public class DayFragment extends Fragment {
             viewModel.insertNewDay(currentlySelectedDay);
         }
         recyclerView = requireView().findViewById(R.id.recyclerViewBullets);
+        //TODO: Hier paar Kommentare einfügen @Maik
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        // TODO: Methode um eine Bullet beim Anklicken abzuhaken
         bulletListAdapter = new BulletListAdapter(currentlySelectedDay.bullets, (bullet,position) -> {
-            // TODO: Methode um geänderten Content zu speichern
         }, (bullet,position) ->{
-            // TODO: Methode um eine Bullet beim Anklicken abzuhaken
             bullet.setChecked(!bullet.isChecked());
             viewModel.updateDay(currentlySelectedDay);
             bulletListAdapter.notifyItemChanged(position);

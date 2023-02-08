@@ -186,7 +186,7 @@ public class TimerFragment extends Fragment {
 
         // Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
         // Every minute, change the UI (60000 milliseconds)
-        // TODO: Diese Klasse auslagern
+
         timer = new CountDownTimer(1500000, 1000) {
 			// The remaining minutes
 			int breakCounter = 0;
