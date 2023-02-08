@@ -105,6 +105,10 @@ public class NotesFragment extends Fragment {
 			}
 			else if (item.getItemId() == R.id.searchBut) {
 				SearchView searchView = requireView().findViewById(R.id.searchBarNotes);
+				if (searchView.getVisibility() == View.VISIBLE) {
+					searchView.setVisibility(View.GONE);
+					return true;
+				}
 				searchView.setVisibility(View.VISIBLE);
 				searchView.callOnClick();
 				searchView.requestFocus();

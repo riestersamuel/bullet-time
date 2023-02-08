@@ -71,7 +71,6 @@
                     android:hint="Enter your note here..."
                     android:minLines="26"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="#1E1B16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

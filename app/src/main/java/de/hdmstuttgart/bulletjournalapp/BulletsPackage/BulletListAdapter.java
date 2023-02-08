@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import de.hdmstuttgart.bulletjournalapp.NotePackage.Note;
 import de.hdmstuttgart.bulletjournalapp.R;
 
 public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.BulletViewHolder> {

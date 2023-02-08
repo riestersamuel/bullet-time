@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/addImageBut"
-        android:icon="@drawable/baseline_insert_photo_24"
+        android:icon="@drawable/baseline_add_photo_alternate_24"
         android:title="addImageBut"
         app:showAsAction="ifRoom" />
 
