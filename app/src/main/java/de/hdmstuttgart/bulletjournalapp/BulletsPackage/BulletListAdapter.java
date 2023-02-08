@@ -1,5 +1,6 @@
 package de.hdmstuttgart.bulletjournalapp.BulletsPackage;
 
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +32,18 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         void onContentChanged(Bullet bullet, int position);
     }
 
+    private TextWatcher textWatcher;
+
     iOnIconClickListener iOnIconClickListener;
     public interface iOnIconClickListener {
         void onBulletClicked(Bullet bullet, int position);
     }
 
-    public BulletListAdapter(ArrayList<Bullet> bulletList, iOnContentClickListener iOnContentClickListener, iOnIconClickListener iOnIconClickListener){
+    public BulletListAdapter(ArrayList<Bullet> bulletList, iOnContentClickListener iOnContentClickListener, iOnIconClickListener iOnIconClickListener, TextWatcher textWatcher){
         this.bulletList = bulletList;
         this.iOnContentClickListener = iOnContentClickListener;
         this.iOnIconClickListener = iOnIconClickListener;
+        this.textWatcher = textWatcher;
     }
 
     @NonNull
@@ -54,6 +58,7 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         Bullet bullet = bulletList.get(position);
         holder.bulletText.setText(bullet.getContent());
         EditText editText = holder.itemView.findViewById(R.id.editText);
+
 
         // If the bullet category is X -> Change image
 
@@ -72,7 +77,9 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
 
         holder.isDone = bullet.isChecked();
         setIcon(holder, bullet);
+        holder.bulletText.addTextChangedListener(textWatcher);
     }
+
 
     private void setIcon(BulletViewHolder holder, Bullet bullet){
         if (bullet.isChecked() && bullet.getCategory() == BulletCategories.TASK) {

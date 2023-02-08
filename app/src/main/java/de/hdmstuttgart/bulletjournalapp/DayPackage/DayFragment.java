@@ -2,6 +2,8 @@ package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 
 
@@ -135,6 +137,28 @@ public class DayFragment extends Fragment {
             bullet.setChecked(!bullet.isChecked());
             viewModel.updateDay(currentlySelectedDay);
             bulletListAdapter.notifyItemChanged(position);
+        }, new TextWatcher() {
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(before != count) {
+                    View child = recyclerView.getFocusedChild();
+                    if(child == null) return;
+                    currentlySelectedDay.bullets.get(recyclerView.getChildViewHolder(child).getAdapterPosition()).setContent(s.toString());
+                    viewModel.updateDay(currentlySelectedDay);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
         recyclerView.setAdapter(bulletListAdapter);
         recyclerView.setHasFixedSize(true);

@@ -32,7 +32,7 @@ public class Bullet {
 		return content;
 	}
 
-	public void setContent(String name) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 
