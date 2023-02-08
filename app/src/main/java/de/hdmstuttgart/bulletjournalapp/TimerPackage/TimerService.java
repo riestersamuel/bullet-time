@@ -24,7 +24,6 @@ public class TimerService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		this.timer = TimerHolder.getInstance().getTimer();
-		timer.start();
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
 				.setSmallIcon(R.drawable.ic_baseline_timer_24)
 				.setContentTitle("Timer is running")

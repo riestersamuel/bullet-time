@@ -41,5 +41,41 @@ public class TimerHolder {
 	public void setShortBreakTimer(CountDownTimer shortBreakTimer) {
 		this.shortBreakTimer = shortBreakTimer;
 	}
+
+	public void cancelTimer() {
+		if (timer != null) {
+			timer.cancel();
+		}
+	}
+
+	public void cancelLongBreakTimer() {
+		if (longBreakTimer != null) {
+			longBreakTimer.cancel();
+		}
+	}
+
+	public void cancelShortBreakTimer() {
+		if (shortBreakTimer != null) {
+			shortBreakTimer.cancel();
+		}
+	}
+
+	public void startTimer() {
+		if (timer != null) {
+			timer.start();
+		}
+	}
+
+	public void startLongBreakTimer() {
+		if (longBreakTimer != null) {
+			longBreakTimer.start();
+		}
+	}
+
+	public void startShortBreakTimer() {
+		if (shortBreakTimer != null) {
+			shortBreakTimer.start();
+		}
+	}
 }
 

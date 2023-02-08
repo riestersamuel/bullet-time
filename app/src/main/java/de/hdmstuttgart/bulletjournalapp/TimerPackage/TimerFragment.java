@@ -151,7 +151,6 @@ public class TimerFragment extends Fragment {
 				animation.setInterpolator(new DecelerateInterpolator());
 				animation.start();
                 remaining_time.setText("" + remainingTime);
-                information_text.setText("minute(s) of your short break remain. \nEnjoy the break!");
             }
 
             @Override
@@ -162,6 +161,9 @@ public class TimerFragment extends Fragment {
 				TimerHolder.getInstance().setTimer(timer);
 				requireContext().startService(timerServiceIntent);
 				showShortBreakNotification();
+				information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
+				TimerHolder.getInstance().cancelShortBreakTimer();
+				TimerHolder.getInstance().startTimer();
             }
         };
         longBreakTimer = new CountDownTimer(1200000, 1000) {
@@ -175,7 +177,6 @@ public class TimerFragment extends Fragment {
 				animation.setInterpolator(new DecelerateInterpolator());
 				animation.start();
                 remaining_time.setText("" + remainingTime);
-                information_text.setText("minute(s) of your long break remain. Enjoy the break!");
             }
 
             @Override
@@ -186,10 +187,14 @@ public class TimerFragment extends Fragment {
 				TimerHolder.getInstance().setTimer(timer);
 				requireContext().startService(timerServiceIntent);
 				showLongBreakNotification();
+				information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
+				TimerHolder.getInstance().cancelLongBreakTimer();
+				TimerHolder.getInstance().startTimer();
             }
         };
 
-        // Our pomodoro timer, here set to 25 minutes (1500000 milliseconds)
+		int state = 0;
+        // Our pomodoro timer, here set to 20 minutes (1500000 milliseconds)
         // Every minute, change the UI (60000 milliseconds)
         // TODO: Diese Klasse auslagern
         timer = new CountDownTimer(1500000, 1000) {
@@ -217,21 +222,22 @@ public class TimerFragment extends Fragment {
                 ((AnimationDrawable) ((ImageView) view.findViewById(R.id.clock_animation)).getDrawable()).stop();
                 breakCounter++;
                 if (breakCounter % 4 == 0) {
-					if(longBreakServiceIntent == null) {
 						longBreakServiceIntent = new Intent(getActivity(), TimerService.class);
 						TimerHolder.getInstance().setLongBreakTimer(longBreakTimer);
+						TimerHolder.getInstance().startLongBreakTimer();
 						requireContext().startService(longBreakServiceIntent);
-					}
+					information_text.setText("minute(s) of your long break remain. \nEnjoy the break!");
                 } else {
-					if(shortBreakServiceIntent == null) {
 						shortBreakServiceIntent = new Intent(getActivity(), TimerService.class);
 						TimerHolder.getInstance().setShortBreakTimer(shortBreakTimer);
-						shortBreakTimer.start();
+						TimerHolder.getInstance().startShortBreakTimer();
 						requireContext().startService(shortBreakServiceIntent);
-					}
+					information_text.setText("minute(s) of your short break remain. \nEnjoy the break!");
                 }
 				startAnimation(view);
 				showTimerFinishedNotification();
+
+				TimerHolder.getInstance().cancelTimer();
 			}
         };
 
@@ -239,7 +245,6 @@ public class TimerFragment extends Fragment {
         extended_fab_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remaining_time.setText("25");
                 information_text.setText("minute(s) of your pomodoro session remain. \nFocus on your most important task!");
                 extended_fab_start.hide();
                 extended_fab_stop.show();
@@ -247,6 +252,7 @@ public class TimerFragment extends Fragment {
 				if(timerServiceIntent == null){
 					timerServiceIntent = new Intent(getActivity(), TimerService.class);
 					TimerHolder.getInstance().setTimer(timer);
+					TimerHolder.getInstance().startTimer();
 					requireContext().startService(timerServiceIntent);
 				}
 
