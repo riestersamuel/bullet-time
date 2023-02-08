@@ -1,6 +1,7 @@
 package de.hdmstuttgart.bulletjournalapp.NotePackage;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -155,7 +157,6 @@ public class NewNoteFragment extends Fragment {
 				}
 			}
 		});
-
 	}
 
 
@@ -215,7 +216,7 @@ public class NewNoteFragment extends Fragment {
 		ImageView imageView = new ImageView(requireContext());
 		imageView.setId(View.generateViewId());
 		try {
-			imageView.setImageBitmap(resizeImage(uri));
+			imageView.setImageURI(uri);
 		} catch (Exception e) {
 			// handle the exception
 		}

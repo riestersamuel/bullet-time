@@ -69,7 +69,11 @@
                     android:background="@drawable/border"
                     android:gravity="top"
                     android:hint="Enter your note here..."
-                    android:minLines="26"
+                    android:maxLines="25"
+                    android:minLines="25"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@id/ET_Content"></LinearLayout>
+                    app:layout_constraintTop_toBottomOf="@id/ET_Content" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
