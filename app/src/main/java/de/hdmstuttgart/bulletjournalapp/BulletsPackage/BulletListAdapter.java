@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,11 +41,17 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         void onBulletClicked(Bullet bullet, int position);
     }
 
-    public BulletListAdapter(ArrayList<Bullet> bulletList, iOnContentClickListener iOnContentClickListener, iOnIconClickListener iOnIconClickListener, TextWatcher textWatcher){
+    iOnBulletLongClickListener iOnBulletLongClickListener;
+    public interface iOnBulletLongClickListener {
+        void onBulletLongClicked(Bullet bullet, int position);
+    }
+
+    public BulletListAdapter(ArrayList<Bullet> bulletList, iOnContentClickListener iOnContentClickListener, iOnIconClickListener iOnIconClickListener, iOnBulletLongClickListener iOnBulletLongClickListener,TextWatcher textWatcher){
         this.bulletList = bulletList;
         this.iOnContentClickListener = iOnContentClickListener;
         this.iOnIconClickListener = iOnIconClickListener;
         this.textWatcher = textWatcher;
+        this.iOnBulletLongClickListener = iOnBulletLongClickListener;
     }
 
     @NonNull
@@ -79,6 +86,15 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         holder.isDone = bullet.isChecked();
         setIcon(holder, bullet);
         holder.bulletText.addTextChangedListener(textWatcher);
+        holder.bulletLayout.setOnLongClickListener(view -> {
+            iOnBulletLongClickListener.onBulletLongClicked(bullet, position);
+            return false;
+        });
+        holder.bulletText.setOnLongClickListener(view -> {
+            iOnBulletLongClickListener.onBulletLongClicked(bullet, position);
+            return false;
+        });
+
     }
 
 
@@ -115,10 +131,12 @@ public class BulletListAdapter extends RecyclerView.Adapter<BulletListAdapter.Bu
         EditText bulletText;
         boolean isDone;
         ImageButton bulletCategory;
+        LinearLayout bulletLayout;
         public BulletViewHolder(@NonNull View itemView) {
             super(itemView);
             bulletText = itemView.findViewById(R.id.editText);
             bulletCategory = itemView.findViewById(R.id.imageButton);
+            bulletLayout = itemView.findViewById(R.id.linearLayout);
         }
     }
 }

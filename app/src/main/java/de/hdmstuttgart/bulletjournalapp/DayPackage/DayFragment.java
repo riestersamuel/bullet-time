@@ -1,6 +1,8 @@
 package de.hdmstuttgart.bulletjournalapp.DayPackage;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -133,7 +135,22 @@ public class DayFragment extends Fragment {
             bullet.setChecked(!bullet.isChecked());
             viewModel.updateDay(currentlySelectedDay);
             bulletListAdapter.notifyItemChanged(position);
-        }, new TextWatcher() {
+        }, (bullet,position) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Delete Bullet");
+            builder.setMessage("Are you sure you want to delete this bullet?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    currentlySelectedDay.bullets.remove(position);
+                    viewModel.updateDay(currentlySelectedDay);
+                    bulletListAdapter.notifyItemRemoved(position);
+                }
+            });
+            builder.setNegativeButton("No", null);
+            builder.show();
+
+        },new TextWatcher() {
 
 
             @Override
