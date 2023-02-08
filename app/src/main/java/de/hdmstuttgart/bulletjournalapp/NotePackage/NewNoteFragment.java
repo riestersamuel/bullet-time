@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,19 +18,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Objects;
 
 import de.hdmstuttgart.bulletjournalapp.MainViewModel;
 import de.hdmstuttgart.bulletjournalapp.R;
@@ -208,22 +210,27 @@ public class NewNoteFragment extends Fragment {
 	}
 
 	private void addImage2Note(Uri uri) {
-		shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_MEDIA_LOCATION);
-		ConstraintLayout layout = requireView().findViewById(R.id.scrollView_images);
+		requestPermissions(new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION}, 0);
+		LinearLayout layout = requireView().findViewById(R.id.linear_layout_images);
 		ImageView imageView = new ImageView(requireContext());
 		imageView.setId(View.generateViewId());
-		imageView.setImageURI(uri);
+		try {
+			imageView.setImageBitmap(resizeImage(uri));
+		} catch (Exception e) {
+			// handle the exception
+		}
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+				ViewGroup.LayoutParams.WRAP_CONTENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+		);
+		params.gravity = Gravity.CENTER_HORIZONTAL;
+		imageView.setLayoutParams(params);
 		layout.addView(imageView);
-		ConstraintSet constraintSet = new ConstraintSet();
-		constraintSet.clone(layout);
-		constraintSet.connect(imageView.getId(),ConstraintSet.TOP,R.id.ET_Content,ConstraintSet.BOTTOM,16);
-		constraintSet.applyTo(layout);
-		imageView.setAdjustViewBounds(true);
-		ConstraintLayout.LayoutParams test = (ConstraintLayout.LayoutParams) imageView.getLayoutParams();
-		test.leftMargin = 16;
-		test.rightMargin = 16;
-		imageView.setLayoutParams(test);
-
-		//layout.requestLayout();
 	}
+
+	private Bitmap resizeImage(Uri uri){
+		Bitmap originalBitmap = BitmapFactory.decodeFile(uri.getPath());
+		return Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth()*2, originalBitmap.getHeight()*2, false);
+	}
+
 }
