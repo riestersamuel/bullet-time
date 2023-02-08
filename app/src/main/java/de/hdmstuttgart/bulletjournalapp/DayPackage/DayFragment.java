@@ -17,21 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.Bullet;
 import de.hdmstuttgart.bulletjournalapp.BulletsPackage.BulletCategories;
@@ -174,7 +168,7 @@ public class DayFragment extends Fragment {
             }
 
             // Today •
-            else if (item.getItemId() == R.id.today){
+            else if (item.getItemId() == R.id.today_Bullet){
                 calendar = Calendar.getInstance();
                 updateDate();
             }

@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/today"
+        android:id="@+id/today_Bullet"
         android:icon="@drawable/baseline_today_24"
         android:title="datePicker"
         app:showAsAction="ifRoom" />
